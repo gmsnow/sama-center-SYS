@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>عرض المرضى</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet" />
+  
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet" />
+  
+    <!-- DataTables Bootstrap -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/message.css">
+  </head>
+  <style>
+    table[dir="rtl"] th, 
+    table[dir="rtl"] td {
+      text-align: right;
+    }
+    .edit-btn, .delete-btn {
+    padding: 6px 12px;
+    margin: 2px 4px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff;
+  }
+  
+ 
+  /* زر التعديل */
+  .edit-btn {
+    background-color: #007bff; /* أزرق */
+  }
+  .edit-btn:hover {
+    background-color: #0056b3;
+  }
+  /* زر الحذف */
+  .delete-btn {
+    background-color: #dc3545; /* أحمر */
+  }
+  .delete-btn:hover {
+    background-color: #a71d2a;
+  }
+    div.dataTables_wrapper {
+      direction: rtl;
+    }
+  </style>
+  <body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                   <div class="navbar nav_title" style="border: 0;">
+         <a href="#" class="site_title"><img src="assets/img/logos/center.png" alt="" srcset="" width="50" height="50"> <span><img src="assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+          </div>
+
+          <div class="clearfix"></div>
+          <br><br>
+
+    
+            <%- include('../nav/navUser') %>
+            <br />
+
+          
+
+            <div class="right_col" role="main">
+                <div class="">
+                  <div class="page-title" dir="rtl">
+                      <div class="title_right">
+                      <h3 >عرض المرضى</h3>
+                    </div>
+                  </div>
+
+
+            <div class="clearfix"></div>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>عرض المرضى </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                     
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" dir="rtl">
+                      <thead>
+                        <tr>
+                          <th>نوع المعاينه</th>
+                          <th>الاسم</th>
+                          <th>العمر</th>
+                          <th>رقم الهاتف</th>
+                          <th>التاريخ</th>
+                          <th>السعر</th>
+                          <th>الاجراءات</th>
+                        </tr>
+                      </thead>
+
+
+                      <tbody>
+                        <% patients.forEach(patient => { %>
+                          <tr>
+                            <td><%= patient.fullname %></td>
+                            <td><%= patient.exam_type %></td>
+                            <td><%= patient.age %></td>
+                            <td><%= patient.phone %></td>
+                            <td><%= patient.dates.toISOString().split('T')[0] %></td>
+                            <td><%= patient.price %> ريال</td>
+                            <td>
+                              <button class="edit-btn" data-id="<%= patient.id %>">تعديل</button>
+                              <button class="delete-btn" data-id="<%= patient.id %>">حذف</button>
+                            </td>
+                            
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                    
+                  </div>
+                </div>
+                 <div id="messageBox" class="message" style="display:none;">
+                  <span id="messageText"></span>
+                  <button id="closeBtn">&times;</button>
+                </div>
+              </div>
+              
+              <div class="modal fade" id="editPatientModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <form id="editPatientForm">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">تعديل بيانات المريض</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      
+                      <div class="modal-body">
+                        <input type="hidden" id="editPatientId" />
+              
+                        <div class="form-group">
+                          <label>نوع المعاينة</label>
+                          <select id="editExamType" class="form-control" required>
+                            <option value="علاج طبيعي">علاج طبيعي</option>
+                            <option value="تغذيه">تغذيه</option>
+                          </select>
+                        </div>
+              
+                        <div class="form-group">
+                          <label>اسم المريض</label>
+                          <input type="text" id="editFullname" class="form-control" required />
+                        </div>
+              
+                        <div class="form-group">
+                          <label>العمر</label>
+                          <input type="number" id="editAge" class="form-control" />
+                        </div>
+              
+                        <div class="form-group">
+                          <label>الهاتف</label>
+                          <input type="number" id="editPhone" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                          <label>الجنس</label>
+                          <select id="editSex" class="form-control" required>
+                            <option value="male">ذكر</option>
+                            <option value="female">أنثى</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label>التاريخ</label>
+                          <input type="date" id="editDate" class="form-control" />
+                        </div>
+              
+                        <div class="form-group">
+                          <label>السعر</label>
+                          <input type="number" id="editPrice" class="form-control" readonly />
+                        </div>
+                      </div>
+                      
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">تأكيد الحذف</h5>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <p>هل أنت متأكد أنك تريد حذف هذا المريض؟</p>
+                      <input type="hidden" id="deletePatientId">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                      <button type="button" class="btn btn-danger" id="confirmDeleteBtn">تأكيد الحذف</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+        <!-- /footer content -->
+      </div>
+    </div>
+   
+                </div>
+            </div></div></div>
+            <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+            <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Datatables -->
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    
+
+  
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="../vendors/jszip/dist/jszip.min.js"></script>
+    <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+    <script>
+      let deleteId = null;
+
+// عند الضغط على زر الحذف
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-btn")) {
+    e.preventDefault();
+    deleteId = e.target.dataset.id;
+    document.getElementById("deletePatientId").value = deleteId;
+
+    // فتح المودال
+    $("#confirmDeleteModal").modal("show");
+  }
+});
+      // استدعاء جميع أزرار التعديل
+      document.addEventListener('click', async (e) => {
+  if (e.target.classList.contains('edit-btn')) {
+    e.preventDefault();
+
+    const id = e.target.dataset.id;
+
+    // جلب بيانات المريض مباشرة من الـ API
+    const res = await fetch(`/api/showPatient/${id}`);
+    const patient = await res.json();
+
+    if (patient) {
+      document.getElementById('editPatientId').value = patient.id;
+      document.getElementById('editFullname').value = patient.fullname;
+      document.getElementById('editExamType').value = patient.exam_type;
+      document.getElementById('editAge').value = patient.age;
+      document.getElementById('editPhone').value = patient.phone;
+      document.getElementById('editSex').value = patient.sex;
+      document.getElementById('editDate').value = new Date(patient.dates).toISOString().split('T')[0];
+      document.getElementById('editPrice').value = patient.age < 14 ? 1500 : 3000;
+
+      // عرض المودال
+      $('#editPatientModal').modal('show');
+    }
+  }
+});
+const form = document.getElementById("addPatientsForm");
+  const msgBox = document.getElementById("messageBox");
+  const msgText = document.getElementById("messageText");
+  const closeBtn = document.getElementById("closeBtn");
+  function showMessage(type, text) {
+    msgBox.className = "message " + type; // success | error | warning
+    msgText.textContent = text;
+    msgBox.style.display = "block";
+  
+    // إخفاء بعد 4 ثواني
+    setTimeout(() => {
+      msgBox.style.display = "none";
+    }, 4000);
+  }
+  
+  closeBtn.addEventListener("click", () => {
+    msgBox.style.display = "none";
+  });
+// إرسال التعديل (PUT request) — يتسجل مرة وحدة
+document.getElementById('editPatientForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const id = document.getElementById('editPatientId').value;
+
+  const updatedPatient = {
+    fullname: document.getElementById('editFullname').value,
+    exam_type: document.getElementById('editExamType').value,
+    age: document.getElementById('editAge').value,
+    phone: document.getElementById('editPhone').value,
+    sex: document.getElementById('editSex').value,
+    dates: document.getElementById('editDate').value,
+    price: document.getElementById('editPrice').value
+  };
+
+  const res = await fetch(`/api/patients/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedPatient)
+  });
+  const result = await res.json();
+  if (res.ok) {
+  showMessage("success", result.message);
+  $('#editPatientModal').modal('hide');
+  const row = document.querySelector(`button.edit-btn[data-id="${id}"]`).closest("tr");
+  row.children[0].textContent = updatedPatient.fullname;
+  row.children[1].textContent = updatedPatient.exam_type;
+  row.children[2].textContent = updatedPatient.age;
+  row.children[3].textContent = updatedPatient.phone;
+  row.children[4].textContent = updatedPatient.dates;
+  row.children[5].textContent = updatedPatient.price + " ريال";
+} else {
+  showMessage("error", result.message);
+}
+});
+    
+
+  const ageInput = document.getElementById('editAge');
+  const priceInput = document.getElementById('editPrice');
+  
+  ageInput.addEventListener('input', () => {
+    const age = parseInt(ageInput.value, 10);
+    if (!isNaN(age)) {
+      priceInput.value = age < 14 ? 1500 : 3000;
+    } else {
+      priceInput.value = '';
+    }
+  });
+  document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+  const id = document.getElementById("deletePatientId").value;
+
+  const res = await fetch(`/api/patients/${id}`, {
+    method: "DELETE",
+  });
+
+  const result = await res.json();
+
+  if (res.ok) {
+    showMessage("success", result.message);
+
+    // إزالة الصف من الجدول
+    const row = document.querySelector(`button.delete-btn[data-id="${id}"]`).closest("tr");
+    row.remove();
+
+    // إغلاق المودال
+    $("#confirmDeleteModal").modal("hide");
+  } else {
+    showMessage("error", result.message);
+  }
+});
+
+    </script>
+  </body>
+</html>

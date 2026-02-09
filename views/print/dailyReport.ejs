@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقرير اليومي</title>
+    <style>
+        p  {
+            background: linear-gradient(90deg, #06b6d4, #3b82f6);
+            padding: 1px;
+            color: #fff;
+            margin: 1px;
+        }
+        #report-title {
+            margin: 0;
+            padding: 10px 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            direction: rtl;
+        }
+        .container {
+            background-color: white;
+            border: 1px solid #333;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; }
+        .header-left { text-align: left; font-weight: bold; color: #1e3a8a; font-size: 5px; }
+        .header-center { text-align: center; }
+        .logo img { width: 30px; height: 30px; }
+        .header-right { text-align: right; font-weight: bold; color: #1e3a8a; font-size: 5px; }
+        .title-section { background: linear-gradient(90deg, #06b6d4, #3b82f6); color: white; text-align: center; font-size: 20px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 15px; }
+        th { background-color: #e5e7eb; border: 1px solid #333; padding: 10px; text-align: center; font-weight: bold; color: #1f2937; }
+        td { border: 1px solid #333; padding: 8px; text-align: center; }
+        .row-number { background-color: #06b6d4; color: white; font-weight: bold; width: 40px; }
+        .patient-name { background-color: #fef3c7; text-align: center; padding-right: 15px; }
+        .service-type { background-color: #d1fae5; }
+        .price { color: #dc2626; font-weight: bold; background-color: #06b6d4;}
+        .receipt-number { color: #ea580c; font-weight: bold; }
+        .notes { text-align: center; }
+        .total-row { background-color: #fce7f3; }
+        .total-row .price { color: #dc2626; font-size: 16px; font-weight: bold; }
+        .expenses-section { background: linear-gradient(90deg, #fbbf24, #f59e0b); color: white; text-align: center; padding: 10px; font-size: 18px; font-weight: bold; }
+        .expenses-total { background-color: #d1fae5; }
+        .final-total { background-color: #fef3c7; }
+        .footer { display: flex; justify-content: space-between; padding: 15px 20px; background-color: #f9fafb; border-top: 1px solid #333; height: 50px; }
+        .footer-left, .footer-right { font-weight: bold; }
+        @media print { * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+    <div class="header-left" style="
+        text-align: left; 
+        font-weight: 600; 
+        font-size: 14px;
+        line-height: 1.5;
+        margin-right: 27px;
+    ">
+        SAMA CENTER FOR<br>
+        PHYSIOTHERAPY & REHABILITATION
+    </div>
+
+    <div class="header-center">
+        <div class="logo" style="
+            width: 50px; 
+            height: 50px; 
+            margin-left: 60px;
+            overflow: hidden; 
+        ">
+            <img src="/assets/img/logos/center.png" alt="Logo" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+    </div>
+
+    <div class="header-right" style="
+        text-align: right; 
+        font-weight: 600; 
+        font-size: 16px;
+        line-height: 1.5;
+        margin-left: 27px;
+    ">
+        مركز سما للعلاج الطبيعي<br>وإعادة التأهيل
+    </div>
+</div>
+
+
+    <!-- Title Section -->
+    <div class="title-section">
+        <p id="report-title">التقرير اليومي للمرضى (الفترة الصباحية) - <span id="arabic-date"></span></p>
+    </div>
+
+    <!-- جلسات اليوم -->
+    <p style="text-align: center;">جدول الجلسات</p>
+   <!-- جلسات اليوم -->
+<table>
+    <thead>
+        <tr>
+            <th>م</th>
+            <th>اسم المريض</th>
+            <th>نوع الخدمة</th>
+            <th>سعر الخدمة</th>
+            <th>رقم السند</th>
+            <th>الملاحظات</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% let totalSessions = 0; %>
+        <% if (sessions.length === 0) { %>
+            <tr><td colspan="6" class="text-center">لا توجد جلسات اليوم</td></tr>
+        <% } else { %>
+            <% sessions.forEach((s, i) => { 
+                totalSessions += parseFloat(s.price || 0); 
+            %>
+                <tr>
+                    <td class="row-number"><%= i + 1 %></td>
+                    <td class="patient-name"><%= s.fullname %></td>
+                    <td class="service-type"><%= s.session_type %></td>
+                    <td class="price"><%= parseFloat(s.price || 0) %></td>
+                    <td class="receipt-number"><%= s.id || '' %></td>
+                    <td class="notes"><%= s.note || '' %></td>
+                </tr>
+            <% }) %>
+            <tr class="total-row">
+                <td colspan="2" style="background-color: #fce7f3; font-weight: bold;">إجمالي الجلسات</td>
+                <td class="price" colspan="4" style="background-color: #fce7f3;"><%= totalSessions %></td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<!-- جدول المرضى -->
+<p style="text-align: center;">جدول المرضى</p>
+<table>
+    <thead>
+        <tr>
+            <th>م</th>
+            <th>اسم المريض</th>
+            <th>نوع الخدمة</th>
+            <th>العمر</th>
+            <th>النوع</th>
+            <th>رقم الهاتف</th>
+            <th>السعر</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% let totalPatients = 0; %>
+        <% if (patients.length === 0) { %>
+            <tr><td colspan="7" class="text-center">لا يوجد مرضى اليوم</td></tr>
+        <% } else { %>
+            <% patients.forEach((p, i) => { 
+                totalPatients += parseFloat(p.price || 0);
+            %>
+                <tr>
+                    <td class="row-number"><%= i + 1 %></td>
+                    <td class="patient-name"><%= p.fullname %></td>
+                    <td class="service-type"><%= p.exam_type %></td>
+                    <td><%= p.age %></td>
+                    <td><%= p.sex %></td>
+                    <td><%= p.phone %></td>
+                    <td class="price"><%= parseFloat(p.price || 0) %> ريال</td>
+                </tr>
+            <% }) %>
+            <tr class="total-row">
+                <td colspan="3" style="background-color: #fce7f3; font-weight: bold;">إجمالي المرضى</td>
+                <td colspan="4" class="price" style="background-color: #fce7f3;"><%= totalPatients %> ريال</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<!-- الإجمالي الكلي -->
+<table>
+    <tbody>
+        <% let grandTotal = totalSessions + totalPatients; %>
+        <tr class="total-row">
+            <td style="background-color: #fce7f3; font-weight: bold;">الإجمالي الكلي (جلسات + مرضى)</td>
+            <td class="price" style="background-color: #fce7f3;"><%= grandTotal %> ريال</td>
+        </tr>
+    </tbody>
+</table>
+<p style="text-align: center;">الصادر بعد المصروفات</p>
+<!-- جدول المصروفات -->
+<table class="expenses-table">
+    <thead>
+        <tr>
+            <th>م</th>
+            <th colspan="2">نوع المصروف</th>
+            <th>المبلغ</th>
+            <th>ملاحظات</th>
+        </tr>
+    </thead>
+    <% let totalExpenses = 0; %>
+    <tbody>
+        <% if (expenses.length === 0) { %>
+            <tr><td colspan="5" class="text-center">لا توجد مصروفات اليوم</td></tr>
+        <% } else { %>
+            <% expenses.forEach((e, i) => { totalExpenses += parseFloat(e.amount || 0); %>
+                <tr>
+                    <td class="row-number"><%= i + 1 %></td>
+                    <td colspan="2" class="patient-name"><%= e.category %></td>
+                    <td class="price"><%= parseFloat(e.amount) %> ريال</td>
+                    <td class="notes"><%= e.notes || '' %></td>
+                </tr>
+            <% }) %>
+            <tr class="expenses-total">
+                <td colspan="2" style="font-weight: bold;">إجمالي المصروفات</td>
+                <td colspan="2" class="price" style="font-weight: bold;"><%= totalExpenses %> ريال</td>
+                <td></td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+<p style="text-align: center;">الصادر بعد السلف</p>
+<!-- جدول السلف -->
+<table class="advances-table">
+    <thead>
+        <tr>
+            <th>م</th>
+            <th colspan="2">اسم الموظف</th>
+            <th>المبلغ</th>
+            <th>ملاحظات</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% let totalAdvances = 0; %>
+        <% if (advances.length === 0) { %>
+            <tr><td colspan="5" class="text-center">لا توجد سلف اليوم</td></tr>
+        <% } else { %>
+            <% advances.forEach((a, i) => { totalAdvances += parseFloat(a.amount || 0); %>
+                <tr>
+                    <td class="row-number"><%= i + 1 %></td>
+                    <td colspan="2" class="patient-name"><%= a.employee_name %></td>
+                    <td class="price"><%= parseFloat(a.amount) %> ريال</td>
+                    <td class="notes"><%= a.note || '' %></td>
+                </tr>
+            <% }) %>
+            <tr class="expenses-total">
+                <td colspan="2" style="font-weight: bold;">إجمالي السلف</td>
+                <td colspan="2" class="price" style="font-weight: bold;"><%= totalAdvances %> ريال</td>
+                <td></td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<!-- الإجمالي النهائي بعد الصرف اليومي -->
+<table class="expenses-table">
+    <tbody>
+        <%  grandTotal = (totalSessions + totalPatients) - (totalExpenses + totalAdvances); %>
+        <tr class="final-total">
+            <td></td>
+            <td style="font-weight: bold;">الإجمالي بعد الصرف اليومي</td>
+            <td></td>
+            <td class="price" style="font-weight: bold; font-size: 16px;"><%= grandTotal %> ريال</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-left">إدارة المركز <br>————</div>
+        <div class="footer-right">السكرتارية <br>————</div>
+    </div>
+</div>
+
+<script>
+    const days = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+    const today = new Date();
+    const dayName = days[today.getDay()];
+    const day = today.getDate().toString().padStart(2,'0');
+    const month = (today.getMonth()+1).toString().padStart(2,'0');
+    const year = today.getFullYear();
+    document.getElementById("arabic-date").textContent = `${dayName} ${day}/${month}/${year}م`;
+</script>
+<script>
+    window.onload = function() {
+      window.print();
+    };
+  </script>
+</body>
+</html>

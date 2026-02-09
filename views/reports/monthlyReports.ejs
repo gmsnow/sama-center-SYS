@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>التقرير الشهري</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+  </head>
+  <style>
+    .downloadBtn {
+        width: 100%;
+    }
+</style>
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+                <a href="#" class="site_title"><img src="/assets/img/logos/center.png" alt="" width="50" height="50"> <span><img src="/assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+            </div>
+
+            <div class="clearfix"></div>
+            <br><br>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <%- include('../nav/navUser') %>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="row top_tiles">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div id="monthlyIncome" class="count"></div>
+                  <h3>💰 الدخل الشهري</h3>
+                </div>
+              </div>
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div id="monthlyAdvance" class="count"></div>
+                  <h3>💳 السلف</h3>
+                </div>
+              </div>
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div id="monthlyExpense" class="count"></div>
+                  <h3>📤 المصروفات</h3>
+                </div>
+              </div>
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div id="monthlyPatients" class="count"></div>
+                  <h3>🔢 عدد المرضى الشهري</h3>
+                </div>
+              </div>
+            </div>
+
+           
+
+
+            
+          <button class="btn btn-primary downloadBtn">تحميل</button>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- jQuery Sparklines -->
+    <script src="../vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- Flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
+    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../vendors/Flot/jquery.flot.time.js"></script>
+    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+    <script>
+      async function fetchmonthlySummary() {
+        try {
+          const response = await fetch('/api/monthly-Summary');
+          const data = await response.json();
+    
+          // Update the HTML counts
+          document.getElementById('monthlyIncome').textContent = data.income || 0;
+          document.getElementById('monthlyAdvance').textContent = data.advances || 0;
+          document.getElementById('monthlyExpense').textContent = data.expenses || 0;
+          document.getElementById('monthlyPatients').textContent = data.patients || 0;
+    
+        } catch (error) {
+          console.error('Error fetching monthly summary:', error);
+        }
+      }
+    
+      // Run once when the page loads
+      fetchmonthlySummary();
+    
+      // Optional: refresh every 1 minute
+      setInterval(fetchmonthlySummary, 60000);     
+    </script>
+    <script>
+      document.querySelector('.downloadBtn').addEventListener('click', () => {
+          window.location.href = 'http://localhost:1337/monthlyReportsPrint';
+      });
+      </script>
+      
+  </body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>التقويم</title>
+
+      <!-- Bootstrap 3 -->
+      <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Font Awesome -->
+      <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- FullCalendar -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <!-- Custom styling plus plugins -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+  </head>
+  <style>
+    .calendar-wrapper {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+      }
+      .card h4 {
+  direction: rtl;
+  text-align: right;
+}
+      h2 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .fc .fc-toolbar-title {
+        font-size: 18px;
+        color: #4b5563;
+      }
+
+      .fc .fc-button {
+        border: 1px solid #a78bfa;
+        background: transparent;
+        color: #a78bfa;
+        border-radius: 6px;
+        padding: 4px 10px;
+        font-size: 14px;
+      }
+      .fc .fc-button:hover {
+        background: #a78bfa;
+        color: #fff;
+      }
+
+      .fc .fc-daygrid-day-number {
+        color: #6b7280;
+      }
+
+      .fc .fc-col-header-cell-cushion {
+        color: #374151;
+      }
+  </style>
+  <body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                   <div class="navbar nav_title" style="border: 0;">
+         <a href="#" class="site_title"><img src="assets/img/logos/center.png" alt="" srcset="" width="50" height="50"> <span><img src="assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+          </div>
+
+          <div class="clearfix"></div>
+          <br><br>
+ <%- include('../nav/navUser') %>
+        <!-- top navigation -->
+    
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>التقويم <small>انقر لإضافة/ تحرير الأحداث</small></h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>أحداث التقويم <small>جلسات</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                     
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <div class="calendar-wrapper">
+                      <!-- Calendar -->
+                      <div class="card">
+                        <h2>📅 التقويم</h2>
+                        <div id="calendar"></div>
+                      </div>
+                  
+                      <!-- Events sidebar -->
+                      <div class="card">
+                        <h2>📝 أحداث التقويم</h2>
+                        <% if (events.length === 0) { %>
+                          <p>لا يوجد أحداث</p>
+                        <% } else { %>
+                          <% events.forEach(event => { %>
+                            <hr>
+                            <h4><%= event.title %>&nbsp;&nbsp; (<%= event.formattedStart %> &#160;إلى&#160; <%= event.formattedEnd %>)</h4>
+                          <% }) %>
+                        <% } %>
+                      </div>
+                
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+
+    <!-- calendar modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="إغلاق">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">إضافة حدث جديد</h4>
+          </div>
+          <div class="modal-body">
+            <form id="eventForm">
+              <div class="form-group">
+                <label for="eventTitle">عنوان الحدث</label>
+                <input type="text" class="form-control" id="eventTitle" required>
+                <div id="titleError" style="color:red; margin-top:5px; display:none;">الرجاء إدخال عنوان للحدث</div>
+              </div>
+              <div class="form-group">
+                <label for="eventDesc">الوصف</label>
+                <textarea class="form-control" id="eventDesc"></textarea>
+              </div>
+              <input type="hidden" id="eventDate">
+            </form>
+        
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">إلغاء</button>
+            <button type="button" class="btn btn-primary" id="saveEvent">حفظ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- FullCalendar -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var eventDate = document.getElementById('eventDate');
+        var eventTitle = document.getElementById('eventTitle');
+        var eventDesc = document.getElementById('eventDesc');
+        var saveEventBtn = document.getElementById('saveEvent');
+      
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+  initialView: 'dayGridMonth',
+  locale: 'ar',
+  firstDay: 0,
+  headerToolbar: {
+    left: 'prev,next today',
+    center: 'title',
+    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+  },
+  selectable: true,
+  select: function(info) {
+    // Save the start and end dates
+    eventDate.value = info.startStr + " to " + info.endStr;
+    eventTitle.value = "";
+    eventDesc.value = "";
+    // Show modal using Bootstrap 3
+    $('#eventModal').modal('show');
+
+    // Store the start/end in hidden inputs if needed
+    eventDate.dataset.start = info.startStr;
+    eventDate.dataset.end = info.endStr;
+  }
+});
+      
+        calendar.render();
+      
+        // Save event
+        saveEventBtn.addEventListener('click', function () {
+  var errorDiv = document.getElementById('titleError');
+
+  if (eventTitle.value.trim() !== "") {
+    var start = eventDate.dataset.start;
+    var end = eventDate.dataset.end;
+
+    // Add to calendar visually
+    calendar.addEvent({
+      title: eventTitle.value,
+      start: start,
+      end: end,
+      description: eventDesc.value,
+      allDay: true
+    });
+
+    // Send event to server
+    $.ajax({
+      url: '/events/add', // your backend route
+      method: 'POST',
+      data: {
+        title: eventTitle.value,
+        description: eventDesc.value,
+        start: start,
+        end: end
+      },
+      success: function(response) {
+        console.log('Event saved:', response);
+      },
+      error: function(err) {
+        console.error('Error saving event:', err);
+      }
+    });
+
+    errorDiv.style.display = 'none';
+    $('#eventModal').modal('hide');
+  } else {
+    errorDiv.style.display = 'block';
+  }
+});})
+
+      </script>
+      
+  </body>
+</html>

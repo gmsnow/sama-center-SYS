@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>التقرير الشهري</title>
+  <style>
+    body {
+      font-family: 'Tahoma', sans-serif;
+      direction: rtl;
+      margin: 20px;
+      background: #fff;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .header .logo img { height: 80px; }
+
+    .header .title { text-align: center; flex: 1; }
+
+    .header .title h1 {
+      background: #b7f59e;
+      padding: 10px;
+      font-size: 22px;
+      color: #800000;
+      border: 2px solid #4e832b;
+      display: inline-block;
+      box-shadow: 2px 2px 5px #ccc;
+    }
+
+    .header .center-name {
+      text-align: left;
+      font-size: 18px;
+      line-height: 1.4;
+      color: #003366;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: center;
+    }
+
+    thead th {
+      background: #d9eaf7;
+      font-weight: bold;
+    }
+
+    /* 🟢 ألوان الخلفية للصفوف */
+    .week-1 { background-color: #e9f7e9; }  /* أخضر فاتح */
+    .week-2 { background-color: #e9f0f9; }  /* أزرق فاتح */
+    .week-3 { background-color: #fff4e5; }  /* برتقالي فاتح */
+    .week-4 { background-color: #fdeaea; }  /* أحمر فاتح */
+    .week-5 { background-color: #f3e5f5; }  /* بنفسجي فاتح */
+
+    /* 🟡 ألوان الأرقام */
+    .number-red { color: #cc0000; font-weight: bold; }
+    .number-green { color: green; font-weight: bold; }
+    .number-blue { color: #003366; font-weight: bold; }
+    .number-purple { color: purple; font-weight: bold; }
+
+    /* صف الإجمالي */
+    .total-row th {
+      background: #f7f7f7;
+      font-size: 18px;
+    }
+
+    .bg-orange { background: #fdd6b5; }
+    .bg-green { background: #d4edc9; }
+    .bg-blue { background: #d9eaf7; }
+
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">
+      <img src="/assets/img/logos/center.png" alt="Logo">
+    </div>
+    <div class="title">
+      <h1>
+        التقرير الشهري لشهر 
+        <%= monthName %> 
+        للعام 
+        <%= year %>م
+      </h1>
+    </div>
+    <div class="center-name">
+      مركز سما<br>
+      للعلاج الطبيعي<br>
+      وإعادة التأهيل
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>م</th>
+        <th class="bg-orange">الأسبوع</th>
+        <th class="bg-blue">من</th>
+        <th class="bg-blue">إلى</th>
+        <th class="bg-green">الوارد</th>
+        <th class="bg-orange">الصادر</th>
+        <th class="bg-gray">الإجمالي بعد الصادر</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (weeklyData.length === 0) { %>
+        <tr>
+          <td colspan="7" class="text-center">لا توجد بيانات لهذا الشهر</td>
+        </tr>
+      <% } else { %>
+        <% weeklyData.forEach((week) => { %>
+          <tr class="week-<%= week.weekNumber %>">
+            <td><%= week.weekNumber %></td>
+            <td>الأسبوع <%= week.weekNumber %></td>
+            <td><%= week.startDate %></td>
+            <td><%= week.endDate %></td>
+            <td class="number-blue"><%= week.totalIncome %></td>
+            <td class="number-red"><%= week.totalExpense %></td>
+            <td class="number-purple"><%= week.net %></td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+    <tfoot>
+      <tr class="total-row">
+        <th colspan="4" class="bg-blue">الإجمالي</th>
+        <th class="number-blue">
+          <%= weeklyData.reduce((acc, w) => acc + w.totalIncome, 0) %>
+        </th>
+        <th class="number-red">
+          <%= weeklyData.reduce((acc, w) => acc + w.totalExpense, 0) %>
+        </th>
+        <th class="number-purple">
+          <%= weeklyData.reduce((acc, w) => acc + w.net, 0) %>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+  <script>
+    window.onload = function() {
+      window.print();
+    };
+  </script>
+</body>
+</html>

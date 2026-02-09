@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>مركز سما</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+  </head>
+<style>
+  .status-green {
+    background-color: #28a745 !important; /* bright green */
+    color: #fff;
+  }
+  .status-orange {
+    background-color: #ff9800 !important; /* orange */
+    color: #fff;
+  }
+  .status-red {
+    background-color: #dc3545 !important; /* red */
+    color: #fff;
+  }
+  .badge {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  @media (max-width: 992px) {
+    .x_panel h2 {
+      font-size: 16px;
+    }
+    table.table th,
+    table.table td {
+      font-size: 13px;
+      padding: 6px;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table.table th,
+    table.table td {
+      font-size: 12px;
+      padding: 5px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .x_panel {
+      margin-bottom: 20px;
+    }
+    table.table th,
+    table.table td {
+      font-size: 11px;
+      padding: 4px;
+    }
+  }
+
+.todo-app input#new-task {
+  width: auto;
+  display: inline-block;
+}
+
+.todo-app h3 {
+  margin-top: 20px;
+  font-weight: 700;
+  font-size: 16px;
+  color: #444;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 5px;
+}
+.todo-app .task-date {
+  font-size: 12px;
+  color: #888;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+.todo-app ul {
+  padding-left: 0;
+}
+
+.todo-app ul li {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-left: 5px solid #0FC57C;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.todo-app ul li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+.todo-app ul li input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.todo-app ul li label {
+  flex: 1;
+  margin: 0;
+  cursor: pointer;
+}
+
+.todo-app ul li input[type="text"] {
+  flex: 1;
+  display: none;
+  margin-right: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.todo-app ul li.editMode input[type="text"] {
+  display: block;
+}
+
+.todo-app ul li.editMode label {
+  display: none;
+}
+
+.todo-app ul li button {
+  margin-left: 5px;
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.todo-app ul li button.edit {
+  background-color: #ffc107;
+  color: #fff;
+  border: none;
+}
+
+.todo-app ul li button.edit:hover {
+  background-color: #e0a800;
+}
+
+.todo-app ul li button.delete {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+.todo-app ul li button.delete:hover {
+  background-color: #c82333;
+}
+
+.todo-app ul li.completed label {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.todo-app ul li.completed {
+  border-left-color: #007bff;
+  background-color: #f0f8ff;
+}
+
+.todo-app .input-group .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-card {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #2f3640;
+}
+</style>
+  <body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                   <div class="navbar nav_title" style="border: 0;">
+         <a href="#" class="site_title"><img src="assets/img/logos/center.png" alt="" srcset="" width="50" height="50"> <span><img src="assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+          </div>
+
+          <div class="clearfix"></div>
+          <br><br>
+ <%- include('../nav/navUser') %>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- بطاقات أعلى الصفحة -->
+          <div class="row tile_count">
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> إجمالي المرضى اليومي</span>
+              <div id="dailyPatients"  class="count"></div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-users"></i> إجمالي المرضى الاسبوعي</span>
+              <div id="weeklyPatients" class="count"></div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-users"></i> إجمالي المرضى الشهري</span>
+              <div id="monthlyPatients" class="count"></div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-male"></i> إجمالي الذكور</span>
+              <div id="malePatients" class="count"></div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-female"></i> إجمالي الإناث</span>
+              <div id="femalePatients" class="count"></div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-archive"></i>  إجمالي التحصيلات الشهرية</span>
+              <div id="totalAmount" class="count"></div>
+            </div>
+          
+
+           
+
+
+
+<div class="row">
+  <!-- جدول المواعيد -->
+ <div class="col-md-4 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>عرض جميع المواعيد</h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="x_content">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered text-center align-middle">
+            <thead>
+              <tr>
+                <th>التاريخ</th>
+                <th>الاسم</th>
+                <th>النوع</th>
+                <th>الحالة</th>
+              </tr>
+            </thead>
+          <tbody id="appointmentsTable"></tbody>
+          </table>
+        </div>
+      </div>                         
+    </div>
+  </div>
+
+  <!-- جدول المرضى -->
+   <div class="col-md-4 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>عرض جميع المرضى</h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="x_content">
+        <div class="table-responsive">
+         <table class="table table-striped table-bordered text-center align-middle">
+  <thead>
+    <tr>
+      <th>الاسم</th>
+      <th>العمر</th>
+      <th>السعر</th>
+      <th>التاريخ</th>
+    </tr>
+  </thead>
+  <tbody id="patientsTable">
+    <!-- Dynamic rows will be inserted here -->
+  </tbody>
+</table>
+
+        </div>
+      </div>                         
+    </div>
+  </div>
+
+  <!-- جدول الجلسات -->
+   <div class="col-md-4 col-sm-12 col-xs-12">
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>عرض جميع الجلسات </h2>
+        <ul class="nav navbar-right panel_toolbox">
+          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+          <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="x_content">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered text-center align-middle">
+            <thead>
+              <tr>
+               <th>الاسم</th>
+              <th>نوع الجلسة</th>
+              <th>التاريخ</th>
+              <th>السعر</th>
+              </tr>
+            </thead>
+            <tbody id="sessionsTable"></tbody>
+          </table>
+        </div>
+      </div>                         
+    </div>
+  </div>
+</div>
+ <div class="center-col" role="main">
+          <div class="">
+            <div class="page-title" dir="rtl">
+                <div class="title_right">
+                <h3 >todo app</h3>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+         
+                   
+               <!-- Todo App Panel -->
+<div class="col-md-12 col-sm-12 col-xs-12">
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>Todo-app</h2>
+      <ul class="nav navbar-right panel_toolbox">
+        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+      </ul>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <div class="todo-app">
+        <div class="input-group mb-3">
+          <input type="text" id="new-task" class="form-control" placeholder="أدخل مهمة جديدة">
+          <button class="btn btn-success" id="addTaskButton"><i class="fa fa-plus"></i> Add</button>
+        </div>
+        <h3>Todo</h3>
+        <ul id="incomplete-tasks" class="list-group mb-3"></ul>
+        <h3>Completed</h3>
+        <ul id="completed-tasks" class="list-group"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
+  <div class="dashboard-card">
+    <h2>احصائيات الدخل الشهري</h2>
+    <canvas id="incomeChart"></canvas>
+  </div>
+              </div>
+        
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- jQuery Sparklines -->
+    <script src="../vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- Flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
+    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../vendors/Flot/jquery.flot.time.js"></script>
+    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+
+    <script>
+      async function fetchDailySummary() {
+        try {
+          const response = await fetch('/api/daily-Summary');
+          const data = await response.json();
+          document.getElementById('dailyPatients').textContent = data.patients || 0;
+        } catch (error) {
+          console.error('Error fetching daily summary:', error);
+        }
+      }
+      fetchDailySummary(); 
+      setInterval(fetchDailySummary, 20000);
+    </script>
+    <script>
+      async function fetchWeeklySummary() {
+        try {
+          const response = await fetch('/api/weekly-Summary');
+          const data = await response.json();
+          document.getElementById('weeklyPatients').textContent = data.patients || 0;
+        } catch (error) {
+          console.error('Error fetching weekly summary:', error);
+        }
+      }
+      fetchWeeklySummary(); 
+      setInterval(fetchWeeklySummary, 20000);
+    </script>
+    <script>
+      async function fetchMonthlySummary() {
+        try {
+          const response = await fetch('/api/monthly-Summary');
+          const data = await response.json();
+          document.getElementById('monthlyPatients').textContent = data.patients || 0;
+        } catch (error) {
+          console.error('Error fetching weekly summary:', error);
+        }
+      }
+      fetchMonthlySummary(); 
+      setInterval(fetchMonthlySummary, 20000);
+    </script>
+    <script>
+      async function malePatients() {
+        try {
+          const response = await fetch('/api/malePatients');
+          const data = await response.json();
+          document.getElementById('malePatients').textContent = data.total_males || 0;
+        } catch (error) {
+          console.error('Error fetching malePatients :', error);
+        }
+      }
+      malePatients(); 
+      setInterval(malePatients, 20000);
+    </script>
+   <script>
+    async function femalePatients() {
+      try {
+        const response = await fetch('/api/femalePatients');
+        const data = await response.json();
+        // استخدم المفتاح الصحيح تمامًا كما هو في السيرفر
+        document.getElementById('femalePatients').textContent = data.total_females || 0;
+      } catch (error) {
+        console.error('Error fetching femalePatients:', error);
+      }
+    }
+  
+    femalePatients();
+    setInterval(femalePatients, 20000);
+  </script>
+   <script>
+    async function totalAmount() {
+      try {
+        const response = await fetch('/api/totalAmount');
+        const data = await response.json();
+        // استخدم المفتاح الصحيح تمامًا كما هو في السيرفر
+        document.getElementById('totalAmount').textContent = "ريال" + data.totalAmount;
+      } catch (error) {
+        console.error('Error fetching totalAmount:', error);
+      }
+    }
+  
+    totalAmount();
+    setInterval(totalAmount, 20000);
+  </script>
+
+<script>
+const taskInput = document.getElementById("new-task");
+const addButton = document.getElementById("addTaskButton");
+const incompleteTaskHolder = document.getElementById("incomplete-tasks");
+const completedTasksHolder = document.getElementById("completed-tasks");
+
+// --- Fetch tasks from backend ---
+async function loadTasks() {
+  const res = await fetch('/api/todos');
+  const tasks = await res.json();
+  
+  // Clear existing tasks
+  incompleteTaskHolder.innerHTML = '';
+  completedTasksHolder.innerHTML = '';
+  
+  tasks.forEach(task => {
+    const listItem = createTaskElement(task);
+    if(task.is_completed){
+      completedTasksHolder.appendChild(listItem);
+    } else {
+      incompleteTaskHolder.appendChild(listItem);
+    }
+  });
+}
+
+// --- Create list item ---
+function createTaskElement(task){
+  const listItem = document.createElement("li");
+
+  const checkBox = document.createElement("input");
+  checkBox.type = "checkbox";
+  checkBox.checked = task.is_completed;
+
+  const label = document.createElement("label");
+  label.innerText = task.task_text;
+
+  // Add date span
+  const dateSpan = document.createElement("span");
+  dateSpan.className = "task-date";
+  const taskDate = new Date(task.created_at); // assuming backend sends created_at
+  dateSpan.innerText = taskDate.toLocaleDateString('ar-YE', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  const editInput = document.createElement("input");
+  editInput.type = "text";
+
+  const editButton = document.createElement("button");
+  editButton.className = "edit";
+  editButton.innerText = "Edit";
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "delete";
+  deleteButton.innerText = "Delete";
+
+  listItem.appendChild(checkBox);
+  listItem.appendChild(label);
+  listItem.appendChild(dateSpan); // add date here
+  listItem.appendChild(editInput);
+  listItem.appendChild(editButton);
+  listItem.appendChild(deleteButton);
+
+  bindTaskEvents(listItem, task);
+
+  return listItem;
+}
+
+// --- Add Task ---
+async function addTask() {
+  const text = taskInput.value.trim();
+  if(!text) return;
+
+  const res = await fetch('/api/todos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_text: text })
+  });
+  const newTask = await res.json();
+  const listItem = createTaskElement(newTask);
+  incompleteTaskHolder.appendChild(listItem);
+  taskInput.value = '';
+}
+
+// --- Edit Task ---
+async function editTask() {
+  const listItem = this.parentNode;
+  const editInput = listItem.querySelector('input[type=text]');
+  const label = listItem.querySelector('label');
+  const isEditing = listItem.classList.contains("editMode");
+
+  if(isEditing){
+    // save to backend
+    const res = await fetch(`/api/todos/${listItem.dataset.id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ task_text: editInput.value })
+    });
+    const updatedTask = await res.json();
+    label.innerText = updatedTask.task_text;
+  } else {
+    editInput.value = label.innerText;
+  }
+
+  listItem.classList.toggle("editMode");
+}
+
+// --- Delete Task ---
+async function deleteTask() {
+  const listItem = this.parentNode;
+  await fetch(`/api/todos/${listItem.dataset.id}`, { method: 'DELETE' });
+  listItem.parentNode.removeChild(listItem);
+}
+
+// --- Toggle Completed ---
+async function toggleTask() {
+  const listItem = this.parentNode;
+  const completed = this.checked;
+  await fetch(`/api/todos/${listItem.dataset.id}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ is_completed: completed })
+  });
+
+  if(completed){
+    completedTasksHolder.appendChild(listItem);
+  } else {
+    incompleteTaskHolder.appendChild(listItem);
+  }
+}
+
+// --- Bind events ---
+function bindTaskEvents(listItem, task){
+  listItem.dataset.id = task.id;
+  const checkBox = listItem.querySelector('input[type=checkbox]');
+  const editButton = listItem.querySelector('button.edit');
+  const deleteButton = listItem.querySelector('button.delete');
+
+  checkBox.onchange = toggleTask;
+  editButton.onclick = editTask;
+  deleteButton.onclick = deleteTask;
+}
+
+// --- Event Listeners ---
+addButton.onclick = addTask;
+
+// Load tasks on page load
+loadTasks();
+</script>
+<script>
+async function loadTodayAppointments() {
+  try {
+    const res = await fetch('/api/showAppointmentsDashboard');
+    const appointments = await res.json();
+
+    const tbody = document.querySelector("#appointmentsTable");
+    tbody.innerHTML = ''; // clear existing rows
+
+    appointments.forEach(app => {
+      const row = document.createElement("tr");
+
+      // Format date nicely
+      const dateObj = new Date(app.date);
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const dateStr = dateObj.toLocaleDateString('ar-YE', options);
+
+      // Map database status to badge classes and Arabic labels
+      let statusClass = 'status-green';
+      let statusText = '';
+
+      switch(app.status) {
+        case 'completed':
+          statusClass = 'status-green';
+          statusText = 'تم الحضور';
+          break;
+        case 'not_completed':
+          statusClass = 'status-red';
+          statusText = 'ملغي';
+          break;
+        case 'pending':
+        default:
+          statusClass = 'status-orange';
+          statusText = 'قيد الانتظار';
+          break;
+      }
+
+      row.innerHTML = `
+        <td>${dateStr}</td>
+        <td>${app.name}</td>
+        <td>${app.speacial}</td>
+        <td><span class="badge ${statusClass}">${statusText}</span></td>
+      `;
+
+      tbody.appendChild(row);
+    });
+
+  } catch (err) {
+    console.error('Error loading today\'s appointments:', err);
+  }
+}
+
+// Load appointments on page load
+loadTodayAppointments();
+setInterval(loadTodayAppointments, 20000);  
+
+</script>
+<script>
+
+  async function loadTodayPatients() {
+  try {
+    const res = await fetch('/api/showPatientssDashboard');
+    const patients = await res.json();
+
+    const tbody = document.querySelector("#patientsTable");
+    tbody.innerHTML = ''; // clear existing rows
+
+    patients.forEach(p => {
+      const row = document.createElement('tr');
+
+      // Format date nicely
+      const dateObj = new Date(p.dates);
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const dateStr = dateObj.toLocaleDateString('ar-YE', options);
+
+      row.innerHTML = `
+        <td>${p.fullname}</td>
+        <td>${p.age}</td>
+        <td>${p.price.toLocaleString()} ﷼</td>
+        <td>${dateStr}</td>
+      `;
+
+      tbody.appendChild(row);
+    });
+
+  } catch (err) {
+    console.error('Error loading patients:', err);
+  }
+}
+
+// Load patients on page load
+loadTodayPatients();
+setInterval(loadTodayPatients, 20000);
+</script>
+<script>
+async function loadTodaySessions() {
+  try {
+    const res = await fetch('/api/showTodaySessions');
+    const sessions = await res.json();
+
+    const tbody = document.querySelector("#sessionsTable");
+    tbody.innerHTML = ''; // clear existing rows
+
+    sessions.forEach(session => {
+      const row = document.createElement("tr");
+
+      // Format date nicely
+      const dateObj = new Date(session.dates);
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const dateStr = dateObj.toLocaleDateString('ar-YE', options);
+
+      // Map status to badge classes
+      let statusClass = 'status-green'; // default completed
+      if(session.status === 'pending') statusClass = 'status-orange';
+      else if(session.status === 'not_completed') statusClass = 'status-red';
+
+      row.innerHTML = `
+        <td>${session.fullname}</td>
+        <td>${session.session_type}</td>
+        <td>${dateStr}</td>
+        <td>${session.price.toLocaleString()} ﷼</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+  } catch (err) {
+    console.error("Error loading today's sessions:", err);
+  }
+}
+
+// Load sessions on page load and refresh every 20 seconds
+loadTodaySessions();
+setInterval(loadTodaySessions, 20000);
+</script>
+<script>
+const ctx = document.getElementById('incomeChart').getContext('2d');
+
+// Example static daily income for current month
+const daysInMonth = 30;
+const dailyIncome = [
+  200, 450, 300, 500, 400, 600, 550, 300, 450, 500,
+  600, 700, 500, 400, 450, 600, 700, 800, 750, 600,
+  500, 650, 700, 550, 600, 650, 700, 750, 800, 900
+];
+
+// Generate day labels
+const dayLabels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+const incomeChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: dayLabels,
+    datasets: [{
+      label: 'Income ($)',
+      data: dailyIncome,
+      backgroundColor: 'rgba(52, 152, 219, 0.6)',
+      borderColor: 'rgba(41, 128, 185, 1)',
+      borderWidth: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#2f3640', font: { size: 14 } } },
+      tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+      x: { ticks: { color: '#2f3640' }, grid: { color: '#dcdde1' } },
+      y: {
+        ticks: { color: '#2f3640' },
+        grid: { color: '#dcdde1' },
+        beginAtZero: true,
+        suggestedMax: 1200 // <-- Increase max to make chart look better
+      }
+    }
+  }
+});
+</script>
+  </body>
+</html>

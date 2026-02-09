@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>عرض المواعيد</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet" />
+  
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet" />
+  
+    <!-- DataTables Bootstrap -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/message.css">
+  </head>
+  <style>
+    table[dir="rtl"] th, 
+    table[dir="rtl"] td {
+      text-align: right;
+    }
+    .edit-btn, .delete-btn {
+    padding: 6px 12px;
+    margin: 2px 4px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff;
+  }
+  
+  td {
+  white-space: normal !important;
+}
+
+/* Optional: add some spacing between buttons */
+td button {
+  margin: 2px 2px;
+  display: inline-block;
+}
+  /* زر التعديل */
+  .edit-btn {
+    background-color: #007bff; /* أزرق */
+  }
+  .edit-btn:hover {
+    background-color: #0056b3;
+  }
+  /* زر الحذف */
+  .delete-btn {
+    background-color: #dc3545; /* أحمر */
+  }
+  .delete-btn:hover {
+    background-color: #a71d2a;
+  }
+    div.dataTables_wrapper {
+      direction: rtl;
+    }
+    table#datatable-buttons tr.completed {
+  background-color: #d4edda !important; /* green */
+}
+
+table#datatable-buttons tr.pending {
+  background-color: #fff3cd !important; /* yellow */
+}
+
+table#datatable-buttons tr.not_completed {
+  background-color: rgb(231, 160, 160) !important; /* default */
+}
+  </style>
+  <body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                   <div class="navbar nav_title" style="border: 0;">
+         <a href="#" class="site_title"><img src="/assets/img/logos/center.png" alt="" srcset="" width="50" height="50"> <span><img src="/assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+          </div>
+
+          <div class="clearfix"></div>
+          <br><br>
+
+    
+            <%- include('../nav/navUser') %>
+            <br />
+
+          
+
+            <div class="right_col" role="main">
+                <div class="">
+                  <div class="page-title" dir="rtl">
+                      <div class="title_right">
+                      <h3 >عرض المواعيد</h3>
+                    </div>
+                  </div>
+
+
+            <div class="clearfix"></div>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>عرض جميع المواعيد </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                     
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" dir="rtl">
+                      <thead>
+                        <tr>
+                          <th>الاسم</th>
+                          <th>الايميل</th>
+                          <th>رقم الهاتف</th>
+                          <th>التاريخ</th>
+                          <th>المعالج</th>
+                          <th>الملاحضات</th>
+                          <th>الاجراءات</th>
+                        </tr>
+                      </thead>
+
+
+                      <tbody>
+                        <% appointments.forEach(row => { %>
+                          <tr class="<%= row.status ? row.status : 'none' %>">
+                            <td><%= row.name %></td>
+                            <td><%= row.email %></td>
+                            <td><%= row.phone %></td>
+                            <td>
+                              <%= (() => {
+                                    const d = new Date(row.date);
+                                    const day = ("0" + d.getDate()).slice(-2);
+                                    const month = ("0" + (d.getMonth() + 1)).slice(-2);
+                                    const year = d.getFullYear();
+                                    return `${day}-${month}-${year}`;
+                                  })()
+                              %>
+                            </td>
+                            <td><%= row.speacial %></td>
+                            <td><%= row.note %></td>
+                            <td>
+                              <button class="complete-btn btn btn-success" data-id="<%= row.id %>">تم الحضور</button>
+                              <button class="notComplate-btn btn btn-secondary" data-id="<%= row.id %>">لم يحضر </button>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                    
+                  </div>
+                </div>
+                 <div id="messageBox" class="message" style="display:none;">
+                  <span id="messageText"></span>
+                  <button id="closeBtn">&times;</button>
+                </div>
+              </div>
+              
+            
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+        <!-- /footer content -->
+      </div>
+    </div>
+   
+                </div>
+            </div></div></div>
+            <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+            <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Datatables -->
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    
+
+  
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="../vendors/jszip/dist/jszip.min.js"></script>
+    <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+    <script>
+  const msgBox = document.getElementById("messageBox");
+  const msgText = document.getElementById("messageText");
+  const closeBtn = document.getElementById("closeBtn");
+  function showMessage(type, text) {
+    msgBox.className = "message " + type; // success | error | warning
+    msgText.textContent = text;
+    msgBox.style.display = "block";
+  
+    // إخفاء بعد 4 ثواني
+    setTimeout(() => {
+      msgBox.style.display = "none";
+    }, 4000);
+  }
+  
+  closeBtn.addEventListener("click", () => {
+    msgBox.style.display = "none";
+  });
+
+
+$(document).on('click', '.complete-btn, .notComplate-btn', function() {
+  const id = $(this).data('id');
+  let status = '';
+
+  if ($(this).hasClass('complete-btn')) status = 'completed';
+  else if ($(this).hasClass('notComplate-btn')) status = 'not_completed';
+
+  const row = $(this).closest('tr');
+
+  fetch(`/api/appointments/${id}/status`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
+  })
+  .then(res => res.json())
+  .then(data => {
+    showMessage("success", data.message);
+
+    // Remove any previous status classes
+    row.removeClass('completed pending not_completed');
+
+    // Add new class based on status
+    row.addClass(status);
+  })
+  .catch(err => showMessage("error", "حدث خطأ في تحديث الحالة"));
+});
+    </script>
+    
+  </body>
+</html>

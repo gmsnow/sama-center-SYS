@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>التقرير اليومي</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+  </head>
+  <style>
+    .downloadBtn {
+        width: 100%;
+    }
+</style>
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+                <a href="#" class="site_title"><img src="/assets/img/logos/center.png" alt="" width="50" height="50"> <span><img src="/assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+            </div>
+
+            <div class="clearfix"></div>
+            <br><br>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <%- include('../nav/navUser') %>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="row top_tiles">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div id="dailyIncome" class="count"></div>
+                  <h3>💰 الدخل اليومي</h3>
+                </div>
+              </div>
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div id="dailyAdvance" class="count"></div>
+                  <h3>💳 السلف</h3>
+                </div>
+              </div>
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div id="dailyExpense" class="count"></div>
+                  <h3>📤 المصروفات</h3>
+                </div>
+              </div>
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="tile-stats">
+                  <div id="dailyPatients" class="count"></div>
+                  <h3>🔢 عدد المرضى اليومي</h3>
+                </div>
+              </div>
+            </div>
+
+           
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>تقرير المرضى</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>تقرير السلف</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content" id="advancesReport">
+                    <!-- Dynamic advance items will be injected here -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>تقرير المصروفات</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content" id="expensesReport">
+                    <!-- Dynamic expense items will be injected here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary downloadBtn">تحميل</button>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- jQuery Sparklines -->
+    <script src="../vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- Flot -->
+    <script src="../vendors/Flot/jquery.flot.js"></script>
+    <script src="../vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../vendors/Flot/jquery.flot.time.js"></script>
+    <script src="../vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+    <script>
+      async function fetchDailySummary() {
+        try {
+          const response = await fetch('/api/daily-Summary');
+          const data = await response.json();
+    
+          // Update the HTML counts
+          document.getElementById('dailyIncome').textContent = data.income || 0;
+          document.getElementById('dailyAdvance').textContent = data.advances || 0;
+          document.getElementById('dailyExpense').textContent = data.expenses || 0;
+          document.getElementById('dailyPatients').textContent = data.patients || 0;
+    
+        } catch (error) {
+          console.error('Error fetching daily summary:', error);
+        }
+      }
+    
+      // Run once when the page loads
+      fetchDailySummary();
+    
+      // Optional: refresh every 1 minute
+      setInterval(fetchDailySummary, 60000);
+
+
+      
+    </script>
+   <script>
+    async function loadTodayReports() {
+      try {
+        const response = await fetch("/api/patients-report");
+        const report = await response.json();
+        const reportContainer = document.querySelector(".x_panel:first-child .x_content");
+        reportContainer.innerHTML = ""; // clear
+    
+        // --- المرضى ---
+        if (report.patients.length > 0) {
+          reportContainer.innerHTML += `<h4 class="text-primary mb-3"> المرضى اليومي</h4>`;
+          report.patients.forEach(item => {
+            const date = new Date(item.dates);
+            const day = date.getDate();
+            const month = date.toLocaleString('ar', { month: 'long' });
+    
+            reportContainer.innerHTML += `
+              <article class="media event">
+                <a class="pull-left date">
+                  <p class="month">${month}</p>
+                  <p class="day">${day}</p>
+                </a>
+                <div class="media-body">
+                  <a class="title" href="#">${item.fullname}</a>
+                  <p>${item.price} ريال</p>
+                </div>
+              </article>`;
+          });
+        }
+    
+        // --- الجلسات ---
+        if (report.sessions.length > 0) {
+          reportContainer.innerHTML += `<hr><h4 class="text-success mb-3"> الجلسات اليوميه</h4>`;
+          report.sessions.forEach(item => {
+            const date = new Date(item.dates);
+            const day = date.getDate();
+            const month = date.toLocaleString('ar', { month: 'long' });
+    
+            reportContainer.innerHTML += `
+              <article class="media event">
+                <a class="pull-left date">
+                  <p class="month">${month}</p>
+                  <p class="day">${day}</p>
+                </a>
+                <div class="media-body">
+                  <a class="title" href="#">${item.fullname}</a>
+                  <p>${item.price} ريال</p>
+                </div>
+              </article>`;
+          });
+        }
+    
+        if (report.patients.length === 0 && report.sessions.length === 0) {
+          reportContainer.innerHTML = `<p>لا توجد بيانات اليوم.</p>`;
+        }
+    
+      } catch (err) {
+        console.error("Error loading today report:", err);
+        document.getElementById("todayReport").innerHTML = `<p class="text-danger">حدث خطأ أثناء تحميل البيانات.</p>`;
+      }
+    }
+    
+    // Run when the DOM is ready
+    document.addEventListener("DOMContentLoaded", loadTodayReports);
+
+
+    async function loadAdvancesReport() {
+  try {
+    const response = await fetch("/api/advances-today"); 
+    const advances = await response.json();
+    const advancesContainer = document.getElementById("advancesReport");
+    advancesContainer.innerHTML = ""; // clear old content
+
+    if (advances.length > 0) {
+      advances.forEach(item => {
+        const date = new Date(item.advance_date);
+        const day = date.getDate();
+        const month = date.toLocaleString('ar', { month: 'long' });
+
+        advancesContainer.innerHTML += `
+          <article class="media event">
+            <a class="pull-left date">
+              <p class="month">${month}</p>
+              <p class="day">${day}</p>
+            </a>
+            <div class="media-body">
+              <a class="title" href="#">${item.employee_name}</a>
+              <p>${item.amount} ريال</p>
+            </div>
+          </article>
+        `;
+      });
+    } else {
+      advancesContainer.innerHTML = `<p>لا توجد سلف اليوم.</p>`;
+    }
+  } catch (err) {
+    console.error("Error loading advances report:", err);
+    document.getElementById("advancesReport").innerHTML = `<p class="text-danger">حدث خطأ أثناء تحميل البيانات.</p>`;
+  }
+}
+
+// Run when DOM is ready
+document.addEventListener("DOMContentLoaded", loadAdvancesReport);
+
+async function loadTodayExpenses() {
+  const res = await fetch("/api/expenses-today");
+  const expenses = await res.json();
+  const container = document.getElementById("expensesReport");
+  container.innerHTML = '';
+
+  expenses.forEach(item => {
+    const date = new Date(item.expense_date);
+    const day = date.getDate();
+    const month = date.toLocaleString('ar', { month: 'long' });
+
+    container.innerHTML += `
+      <article class="media event">
+        <a class="pull-left date">
+          <p class="month">${month}</p>
+          <p class="day">${day}</p>
+        </a>
+        <div class="media-body">
+          <a class="title" href="#">${item.category}</a>
+          <p>${item.amount} ريال</p>
+        </div>
+      </article>`;
+  });
+
+  if (expenses.length === 0) container.innerHTML = `<p>لا توجد مصروفات اليوم.</p>`;
+}
+
+// Run on DOM ready
+document.addEventListener("DOMContentLoaded", loadTodayExpenses);
+    </script>
+    
+    <script>
+      document.querySelector('.downloadBtn').addEventListener('click', () => {
+          window.location.href = 'http://localhost:1337/dailyReportsPrint';
+      });
+      </script>
+      
+  </body>
+</html>

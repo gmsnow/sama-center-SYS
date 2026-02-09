@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>عرض المواعيد</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet" />
+  
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet" />
+  
+    <!-- DataTables Bootstrap -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/message.css">
+  </head>
+  <style>
+    table[dir="rtl"] th, 
+    table[dir="rtl"] td {
+      text-align: right;
+    }
+    .edit-btn, .delete-btn {
+    padding: 6px 12px;
+    margin: 2px 4px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff;
+  }
+  
+  td {
+  white-space: normal !important;
+}
+
+/* Optional: add some spacing between buttons */
+td button {
+  margin: 2px 2px;
+  display: inline-block;
+}
+  /* زر التعديل */
+  .edit-btn {
+    background-color: #007bff; /* أزرق */
+  }
+  .edit-btn:hover {
+    background-color: #0056b3;
+  }
+  /* زر الحذف */
+  .delete-btn {
+    background-color: #dc3545; /* أحمر */
+  }
+  .delete-btn:hover {
+    background-color: #a71d2a;
+  }
+    div.dataTables_wrapper {
+      direction: rtl;
+    }
+    table#datatable-buttons tr.completed {
+  background-color: #d4edda !important; /* green */
+}
+
+table#datatable-buttons tr.pending {
+  background-color: #fff3cd !important; /* yellow */
+}
+
+table#datatable-buttons tr.not_completed {
+  background-color: rgb(231, 160, 160) !important; /* default */
+}
+  </style>
+  <body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                   <div class="navbar nav_title" style="border: 0;">
+         <a href="#" class="site_title"><img src="assets/img/logos/center.png" alt="" srcset="" width="50" height="50"> <span><img src="assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+          </div>
+
+          <div class="clearfix"></div>
+          <br><br>
+
+    
+            <%- include('../nav/navUser') %>
+            <br />
+
+          
+
+            <div class="right_col" role="main">
+                <div class="">
+                  <div class="page-title" dir="rtl">
+                      <div class="title_right">
+                      <h3 >عرض المواعيد</h3>
+                    </div>
+                  </div>
+
+
+            <div class="clearfix"></div>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>عرض جميع المواعيد </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                     
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" dir="rtl">
+                      <thead>
+                        <tr>
+                          <th>الاسم</th>
+                          <th>الايميل</th>
+                          <th>رقم الهاتف</th>
+                          <th>التاريخ</th>
+                          <th>المعالج</th>
+                          <th>الملاحضات</th>
+                          <th>الاجراءات</th>
+                        </tr>
+                      </thead>
+
+
+                      <tbody>
+                        <% appointments.forEach(row => { %>
+                          <tr class="<%= row.status ? row.status : 'none' %>">
+                            <td><%= row.name %></td>
+                            <td><%= row.email %></td>
+                            <td><%= row.phone %></td>
+                            <td>
+                              <%= (() => {
+                                    const d = new Date(row.date);
+                                    const day = ("0" + d.getDate()).slice(-2);
+                                    const month = ("0" + (d.getMonth() + 1)).slice(-2);
+                                    const year = d.getFullYear();
+                                    return `${day}-${month}-${year}`;
+                                  })()
+                              %>
+                            </td>
+                            <td><%= row.speacial %></td>
+                            <td><%= row.note %></td>
+                            <td>
+                              <button class="edit-btn" data-id="<%= row.id %>">تعديل</button>
+                              <button class="delete-btn btn btn-danger" data-id="<%= row.id %>">حذف</button>
+                              <button class="complete-btn btn btn-success" data-id="<%= row.id %>">تم الحضور</button>
+                              <button class="pending-btn btn btn-warning" data-id="<%= row.id %>">قيد الانتضار</button>
+                              <button class="notComplate-btn btn btn-secondary" data-id="<%= row.id %>">لم يحضر </button>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                    
+                  </div>
+                </div>
+                 <div id="messageBox" class="message" style="display:none;">
+                  <span id="messageText"></span>
+                  <button id="closeBtn">&times;</button>
+                </div>
+              </div>
+              
+              <div class="modal fade" id="editAppointmentModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <form id="editAppointmentForm">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">تعديل بيانات الموعد</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      
+                      <div class="modal-body">
+                        <input type="hidden" id="editAppointmentId" />
+              
+                        <div class="form-group">
+                          <label>اسم المريض</label>
+                          <input type="text" id="editName" class="form-control" required />
+                        </div>
+              
+                        <div class="form-group">
+                          <label>البريد الإلكتروني</label>
+                          <input type="email" id="editEmail" class="form-control" />
+                        </div>
+              
+                        <div class="form-group">
+                          <label>رقم الهاتف</label>
+                          <input type="text" id="editPhone" class="form-control" />
+                        </div>
+              
+                        <div class="form-group">
+                          <label>التاريخ</label>
+                          <input type="date" id="editDate" class="form-control" required />
+                        </div>
+              
+                        <div class="form-group">
+                          <label>المعالج</label>
+                          <select name="speacial" class="form-control speacial" id="editSpeacial" required>
+                           <option value=" اسم الاخصائي" disabled selected>اسم الاخصائي</option>
+                          </select>
+                        </div>
+                   
+                        <div class="form-group">
+                          <label>الملاحظات</label>
+                          <textarea id="editNotes" class="form-control"></textarea>
+                        </div>
+                      </div>
+                      
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">تأكيد الحذف</h5>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <p>هل أنت متأكد أنك تريد حذف هذا المريض؟</p>
+                      <input type="hidden" id="deletePatientId">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                      <button type="button" class="btn btn-danger" id="confirmDeleteBtn">تأكيد الحذف</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+        <!-- /footer content -->
+      </div>
+    </div>
+   
+                </div>
+            </div></div></div>
+            <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+            <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Datatables -->
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    
+
+  
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="../vendors/jszip/dist/jszip.min.js"></script>
+    <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+    <script>
+  const msgBox = document.getElementById("messageBox");
+  const msgText = document.getElementById("messageText");
+  const closeBtn = document.getElementById("closeBtn");
+  function showMessage(type, text) {
+    msgBox.className = "message " + type; // success | error | warning
+    msgText.textContent = text;
+    msgBox.style.display = "block";
+  
+    // إخفاء بعد 4 ثواني
+    setTimeout(() => {
+      msgBox.style.display = "none";
+    }, 4000);
+  }
+  
+  closeBtn.addEventListener("click", () => {
+    msgBox.style.display = "none";
+  });
+      // عند الضغط على زر التعديل
+      document.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('edit-btn')) {
+          e.preventDefault();
+    
+          const id = e.target.dataset.id;
+    
+          // جلب بيانات الموعد من الـ API
+          const res = await fetch(`/api/appointments/${id}`);
+          const appointment = await res.json();
+    
+          if (appointment) {
+            // تعبئة الحقول في المودال
+            document.getElementById('editAppointmentId').value = appointment.id;
+            document.getElementById('editName').value = appointment.name;
+            document.getElementById('editEmail').value = appointment.email;
+            document.getElementById('editPhone').value = appointment.phone;
+            document.getElementById('editDate').value = new Date(appointment.date).toISOString().split('T')[0];
+            document.getElementById('editSpeacial').value = appointment.speacial;
+            document.getElementById('editNotes').value = appointment.note;
+    
+            // عرض المودال
+            $('#editAppointmentModal').modal('show');
+          }
+        }
+      });
+    
+      // عند الضغط على حفظ التغييرات
+      document.getElementById('editAppointmentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+    
+        const id = document.getElementById('editAppointmentId').value;
+    
+        const updatedAppointment = {
+          name: document.getElementById('editName').value,
+          email: document.getElementById('editEmail').value,
+          phone: document.getElementById('editPhone').value,
+          date: document.getElementById('editDate').value,
+          speacial: document.getElementById('editSpeacial').value,
+          notes: document.getElementById('editNotes').value
+        };
+    
+        // إرسال التعديلات للسيرفر
+        const res = await fetch(`/api/appointments/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updatedAppointment)
+        });
+    
+        const result = await res.json();
+    
+        if (res.ok) {
+          showMessage("success", result.message);
+          $('#editAppointmentModal').modal('hide');
+    
+          // تحديث الصف مباشرة في الجدول بدون إعادة تحميل الصفحة
+          const row = document.querySelector(`button.edit-btn[data-id="${id}"]`).closest("tr");
+          row.children[0].textContent = updatedAppointment.name;
+          row.children[1].textContent = updatedAppointment.email;
+          row.children[2].textContent = updatedAppointment.phone;
+          row.children[3].textContent = updatedAppointment.date;
+          row.children[4].textContent = updatedAppointment.speacial;
+          row.children[5].textContent = updatedAppointment.notes;
+        } else {
+          alert("خطأ: " + result.message);
+        }
+      });
+      
+      $(document).on("click", ".delete-btn", function () {
+  const deleteId = $(this).data("id"); 
+  $("#deletePatientId").val(deleteId);
+  $("#confirmDeleteModal").modal("show");
+});
+// عند الضغط على زر الحذف
+$("#confirmDeleteBtn").on("click", function () {
+  const id = $("#deletePatientId").val();
+
+  fetch(`/api/appointments/${id}`, {
+    method: "DELETE",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      showMessage("success", data.message); // ✅ صح
+      $("#confirmDeleteModal").modal("hide");
+
+      // حذف الصف مباشرة من الجدول
+      $(`.delete-btn[data-id="${id}"]`).closest("tr").remove();
+    })
+    .catch((err) => {
+      console.error(err);
+      showMessage("error", "حدث خطأ أثناء الحذف"); // ✅ مع نوع error
+    });
+});
+
+
+$(document).on('click', '.complete-btn, .pending-btn, .notComplate-btn', function() {
+  const id = $(this).data('id');
+  let status = '';
+
+  if ($(this).hasClass('complete-btn')) status = 'completed';
+  else if ($(this).hasClass('pending-btn')) status = 'pending';
+  else if ($(this).hasClass('notComplate-btn')) status = 'not_completed';
+
+  const row = $(this).closest('tr');
+
+  fetch(`/api/appointments/${id}/status`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
+  })
+  .then(res => res.json())
+  .then(data => {
+    showMessage("success", data.message);
+
+    // Remove any previous status classes
+    row.removeClass('completed pending not_completed');
+
+    // Add new class based on status
+    row.addClass(status);
+  })
+  .catch(err => showMessage("error", "حدث خطأ في تحديث الحالة"));
+});
+    </script>
+    <script>
+          async function loadSpecialists() {
+  try {
+    const response = await fetch('/api/specialists');
+    const specialists = await response.json();
+
+    const select = document.querySelector('.speacial');
+
+    specialists.forEach(s => {
+      const option = document.createElement('option');
+      option.value = s.fullname;
+      option.textContent = s.fullname;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error loading specialists:', error);
+  }
+}
+
+loadSpecialists();
+    </script>
+  </body>
+</html>

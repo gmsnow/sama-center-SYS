@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>اضافه موعد</title>
+    
+    <!-- Core CSS -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    
+    <!-- Date and Time Pickers -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="../vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    
+    <!-- Other UI Plugins -->
+    <link href="../vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+    <link href="../vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+    <link href="../vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link href="../vendors/cropper/dist/cropper.min.css" rel="stylesheet">
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="../vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    <link href="../vendors/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="../vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+    <link href="../vendors/starrr/dist/starrr.css" rel="stylesheet">
+    
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/message.css">
+  </head>
+  <style>
+    
+  </style>
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+                <a href="#" class="site_title"><img src="/assets/img/logos/center.png" alt="" width="50" height="50"> <span><img src="/assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+            </div>
+
+            <div class="clearfix"></div>
+            <br><br>
+            <%- include('../nav/navUser') %>
+        <!-- top navigation -->
+
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title" dir="rtl">
+                <div class="title_right">
+                <h3 >اضافه موعد</h3>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel" >
+                  <div class="x_title">
+                    <h2>ادخالات المواعيد</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                  
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form id="addAppointmentForm" data-parsley-validate class="form-horizontal form-label-left" dir="rtl">     
+                        <div class="form-group">
+                          <div class="col-xs-12">
+                            <input type="text" name="name" required="required" class="form-control" placeholder=" اسم المريض">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-xs-12">
+                            <input type="email" name="email" class="form-control" placeholder="البريد الالكتروني">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                              <input id="Phone" name="phone" class="form-control" required="required" type="number" placeholder="+967">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" dir="rtl">
+                           <div class="col-xs-12"> 
+                            <div class="input-group date" id="myDatepicker"> 
+                            <input type="text" name="date" class="form-control" placeholder="اختر التاريخ" required /> 
+                            <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> 
+                          </span>
+                         </div> 
+                        </div>
+                       </div>
+                         
+                            <div class="form-group">
+  <div class="col-xs-12">
+    <select name="speacial" id="speacial" class="form-control" required>
+      <option value="" disabled selected>اسم الاخصائي</option>
+    </select>
+  </div>
+</div>
+                        
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                  <textarea name="note" class="form-control" placeholder="ملاحظات"></textarea>
+                                </div>
+                              </div>
+                        <div class="ln_solid"></div>
+                      
+                        <div class="form-group">
+                          <div class="col-xs-12 text-center">
+                            <button id="cancelBtn" class="btn btn-warning" type="button">إلغاء</button>
+                            <button class="btn btn-secondary" type="reset">إعادة تعيين</button>
+                            <button type="submit" class="btn btn-success">حفظ</button>
+                          </div>
+                        </div>
+                      
+                      </form>
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="messageBox" class="message" style="display:none;">
+              <span id="messageText"></span>
+              <button id="closeBtn">&times;</button>
+            </div>
+          </div>
+
+        
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+    </div>
+</div>
+    <!-- jQuery -->
+ <!-- Core Libraries -->
+ <script src="../vendors/jquery/dist/jquery.min.js"></script>
+ <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+ <script src="../vendors/fastclick/lib/fastclick.js"></script>
+ <script src="../vendors/nprogress/nprogress.js"></script>
+ 
+ <!-- Moment.js (needed for date/time plugins) -->
+ <script src="../vendors/moment/min/moment.min.js"></script>
+ 
+ <!-- Date/Time Pickers -->
+ <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+ <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+ 
+ <!-- UI Plugins -->
+ <script src="../vendors/iCheck/icheck.min.js"></script>
+ <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+ <script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+ <script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+ <script src="../vendors/google-code-prettify/src/prettify.js"></script>
+ <script src="../vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+ <script src="../vendors/switchery/dist/switchery.min.js"></script>
+ <script src="../vendors/select2/dist/js/select2.full.min.js"></script>
+ <script src="../vendors/parsleyjs/dist/parsley.min.js"></script>
+ <script src="../vendors/autosize/dist/autosize.min.js"></script>
+ <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+ <script src="../vendors/starrr/dist/starrr.js"></script>
+ <script src="../vendors/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
+ <script src="../vendors/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+ <script src="../vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+ <script src="../vendors/jquery-knob/dist/jquery.knob.min.js"></script>
+ <script src="../vendors/cropper/dist/cropper.min.js"></script>
+ 
+ <!-- Custom Theme Script -->
+ <script src="../build/js/custom.min.js"></script>
+ 
+ <!-- Initialize datetimepicker -->
+ <script>
+     $('#myDatepicker').datetimepicker();
+ 
+     $('#myDatepicker2').datetimepicker({
+         format: 'DD.MM.YYYY'
+     });
+ 
+     $('#myDatepicker3').datetimepicker({
+         format: 'hh:mm A'
+     });
+ 
+     $('#myDatepicker4').datetimepicker({
+         ignoreReadonly: true,
+         allowInputToggle: true
+     });
+ 
+     $('#datetimepicker6').datetimepicker();
+ 
+     $('#datetimepicker7').datetimepicker({
+         useCurrent: false
+     });
+ 
+     $("#datetimepicker6").on("dp.change", function(e) {
+         $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+     });
+ 
+     $("#datetimepicker7").on("dp.change", function(e) {
+         $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+     });
+ </script>
+
+ <!-- WYSIWYG Image Insert Script -->
+ 
+<script>
+   const msgBox = document.getElementById("messageBox");
+  const msgText = document.getElementById("messageText");
+  const closeBtn = document.getElementById("closeBtn");
+  document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("addAppointmentForm");
+  const cancelBtn = document.getElementById("cancelBtn");
+
+  // عند الإلغاء
+  cancelBtn.addEventListener("click", () => {
+    window.history.back(); // يرجع للصفحة السابقة
+  });
+
+  // عند الحفظ
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // هذا يوقف الريلود 👍
+
+    const formData = {
+      name: form.name.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      date: form.date.value,
+      speacial: form.speacial.value,
+      note: form.note.value
+    };
+
+    try {
+      const response = await fetch("/addAppointment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error("خطأ في الاتصال بالسيرفر");
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+  showMessage("success", result.message || "تم حفظ الموعد بنجاح!");
+  form.reset();
+} else {
+  showMessage("error", result.message || "حدث خطأ أثناء الحفظ");
+}
+    } catch (err) {
+      alert("❌ خطأ: " + err.message);
+    }
+  });
+});
+function showMessage(type, text) {
+  msgBox.className = "message " + type; // success | error | warning
+  msgText.textContent = text;
+  msgBox.style.display = "block";
+
+  // إخفاء بعد 4 ثواني
+  setTimeout(() => {
+    msgBox.style.display = "none";
+  }, 4000);
+}
+  
+  closeBtn.addEventListener("click", () => {
+    msgBox.style.display = "none";
+  });
+
+  </script>
+  <script>
+    async function loadSpecialists() {
+  try {
+    const response = await fetch('/api/specialists');
+    const specialists = await response.json();
+
+    const select = document.getElementById('speacial');
+
+    specialists.forEach(s => {
+      const option = document.createElement('option');
+      option.value = s.fullname;
+      option.textContent = s.fullname;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error loading specialists:', error);
+  }
+}
+
+loadSpecialists();
+  </script>
+</body>
+</html>

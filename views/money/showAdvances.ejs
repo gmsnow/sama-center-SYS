@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>عرض السلف</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet" />
+  
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet" />
+  
+    <!-- DataTables Bootstrap -->
+    <link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/message.css">
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+  </head>
+  <style>
+    table[dir="rtl"] th, 
+    table[dir="rtl"] td {
+      text-align: right;
+    }
+    .edit-btn, .delete-btn {
+    padding: 6px 12px;
+    margin: 2px 4px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff;
+  }
+
+  /* زر التعديل */
+  .edit-btn {
+    background-color: #007bff; /* أزرق */
+  }
+  .edit-btn:hover {
+    background-color: #0056b3;
+  }
+
+  /* زر الحذف */
+  .delete-btn {
+    background-color: #dc3545; /* أحمر */
+  }
+  .delete-btn:hover {
+    background-color: #a71d2a;
+  }
+    div.dataTables_wrapper {
+      direction: rtl;
+    }
+    /* تخصيص مودال التعديل */
+#editAdvanceModal .modal-header {
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+}
+
+#editAdvanceModal .modal-content {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+#editAdvanceModal .form-control-sm {
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+
+
+#editAdvanceModal .btn-primary:hover {
+  background-color: #20949d;
+}
+
+#editAdvanceModal .btn-secondary {
+  background-color: #2f2f2f;
+  color: #fff;
+  border: none;
+}
+
+#editAdvanceModal .btn-secondary:hover {
+  background-color: #000000;
+}
+
+  </style>
+  <body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                   <div class="navbar nav_title" style="border: 0;">
+         <a href="#" class="site_title"><img src="/assets/img/logos/center.png" alt="" srcset="" width="50" height="50"> <span><img src="/assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+          </div>
+
+          <div class="clearfix"></div>
+          <br><br>
+
+    
+            <%- include('../nav/navUser') %>
+            <br />
+
+           
+
+            <div class="right_col" role="main">
+                <div class="">
+                  <div class="page-title" dir="rtl">
+                      <div class="title_right">
+                      <h3 >عرض  جميع السلف</h3>
+                    </div>
+                  </div>
+
+
+            <div class="clearfix"></div>
+
+          
+
+           
+
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>عرض السلف </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                  <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" dir="rtl">
+                      <thead>
+                        <tr>
+                          <th>اسم الموظف </th>
+                          <th>التخصص</th>
+                          <th>مبلغ السلفة</th>
+                          <th>تاريخ السلفة</th>
+                          <th>ملاحظات</th>
+                          <th>الاجراءات</th>
+                        </tr>
+                      </thead>
+
+
+                      <tbody>
+                           <% Advances.forEach(Advance => { %>
+                          <tr>
+                            <td><%= Advance.employee_name %></td>
+                            <td><%= Advance.specialty %></td>
+                            <td><%= Advance.amount %></td>
+                            <td><%= new Date(Advance.advance_date.setDate(Advance.advance_date.getDate() + 1)).toISOString().split('T')[0] %></td>
+                            <td><%= Advance.notes %></td>
+                            <td>
+                              <button class="edit-btn" data-id="<%= Advance.id %>">تعديل</button>
+                              <button class="delete-btn" data-id="<%= Advance.id %>">حذف</button>
+                            </td>
+                            
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div id="messageBox" class="message" style="display:none;">
+                  <span id="messageText"></span>
+                  <button id="closeBtn">&times;</button>
+                </div>
+              </div>
+
+<!-- Edit Advance Modal -->
+<div class="modal fade" id="editAdvanceModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <form id="editAdvanceForm">
+      <div class="modal-content">
+        
+        <!-- Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">تعديل بيانات السلفة</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Body -->
+        <div class="modal-body">
+          <input type="hidden" id="editAdvanceId" />
+
+          <div class="form-group">
+            <label>اسم الموظف</label>
+            <select id="editEmployeeName" name="employee_name" class="form-control speacial" required>
+           <option value="" disabled selected>اسم الموظف</option>
+            </select>
+          </div>
+
+
+          <div class="form-group">
+            <label>التخصص</label>
+            <select id="editSpecialty" name="specialty" class="form-control" required>
+              <option value="" disabled selected>اختر التخصص</option>
+              <option value="علاج طبيعي">علاج طبيعي</option>
+              <option value="تغذيه">تغذيه</option>
+              <option value="سكارتير">سكارتير</option>
+              <option value="حارس">حارس</option>
+              <option value="اداره">اداره</option>
+              <option value="تقنيه معلومات">تقنيه معلومات</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>مبلغ السلفة</label>
+            <input type="number" id="editAmount" name="amount" class="form-control" placeholder="ادخل المبلغ" required />
+          </div>
+
+          <div class="form-group">
+            <label>تاريخ السلفة</label>
+            <input type="date" id="editAdvanceDate" name="advance_date" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+            <label>ملاحظات</label>
+            <textarea id="editNotes" name="notes" rows="3" class="form-control" placeholder="اكتب ملاحظات"></textarea>
+          </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">💾 حفظ التغييرات</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">تأكيد الحذف</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>هل أنت متأكد أنك تريد حذف هذ السلفه؟</p>
+        <input type="hidden" id="deletePatientId">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">تأكيد الحذف</button>
+      </div>
+    </div>
+  </div>
+</div>
+              <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">تأكيد الحذف</h5>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <p>هل أنت متأكد أنك تريد حذف هذه السلفه؟</p>
+                      <input type="hidden" id="deletePatientId">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+                      <button type="button" class="btn btn-danger" id="confirmDeleteBtn">تأكيد الحذف</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+        <!-- /footer content -->
+      </div>
+    </div>
+                </div>
+            </div></div></div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- Datatables -->
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<!-- Moment.js (needed for date/time plugins) -->
+  <script src="../vendors/moment/min/moment.min.js"></script>
+ 
+  <!-- Date/Time Pickers -->
+  <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- DataTables Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+    <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="../vendors/jszip/dist/jszip.min.js"></script>
+    <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+ <script>
+  $('#myDatepicker').datetimepicker();
+
+  $('#myDatepicker2').datetimepicker({
+      format: 'DD.MM.YYYY'
+  });
+
+  $('#myDatepicker3').datetimepicker({
+      format: 'hh:mm A'
+  });
+
+  $('#myDatepicker4').datetimepicker({
+      ignoreReadonly: true,
+      allowInputToggle: true
+  });
+
+  $('#datetimepicker6').datetimepicker();
+
+  $('#datetimepicker7').datetimepicker({
+      useCurrent: false
+  });
+
+  $("#datetimepicker6").on("dp.change", function(e) {
+      $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+  });
+
+  $("#datetimepicker7").on("dp.change", function(e) {
+      $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+  });
+</script>
+<script>
+  const msgBox = document.getElementById("messageBox");
+  const msgText = document.getElementById("messageText");
+  const closeBtn = document.getElementById("closeBtn");
+  function showMessage(type, text) {
+    msgBox.className = "message " + type; // success | error | warning
+    msgText.textContent = text;
+    msgBox.style.display = "block";
+  
+    // إخفاء بعد 4 ثواني
+    setTimeout(() => {
+      msgBox.style.display = "none";
+    }, 4000);
+  }
+  $(document).ready(function() {
+  // تفعيل DataTable
+  var table = $('#datatable-buttons').DataTable();
+
+  // فتح نافذة تعديل
+  $('#datatable-buttons').on('click', '.edit-btn', function() {
+    const id = $(this).data('id');
+    const row = $(this).closest('tr');
+    
+    // ملأ الفورم بالبيانات
+    $('#editAdvanceId').val(id);
+    $('#editAdvanceModal [name="employee_name"]').val(row.find('td:eq(0)').text());
+    $('#editAdvanceModal [name="specialty"]').val(row.find('td:eq(1)').text());
+    $('#editAdvanceModal [name="amount"]').val(row.find('td:eq(2)').text());
+    $('#editAdvanceModal [name="advance_date"]').val(row.find('td:eq(3)').text());
+    $('#editAdvanceModal [name="notes"]').val(row.find('td:eq(4)').text());
+
+    $('#editAdvanceModal').modal('show');
+  });
+
+  // حفظ التعديلات
+  $('#editAdvanceForm').submit(function(e) {
+    e.preventDefault();
+    const id = $('#editAdvanceId').val();
+    const data = {
+      employee_name: $('#editAdvanceModal [name="employee_name"]').val(),
+      specialty: $('#editAdvanceModal [name="specialty"]').val(),
+      amount: $('#editAdvanceModal [name="amount"]').val(),
+      advance_date: $('#editAdvanceModal [name="advance_date"]').val(),
+      notes: $('#editAdvanceModal [name="notes"]').val()
+    };
+    fetch(`/advances/update/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(result => {
+      if(result.success) {
+        showMessage("success", result.message);
+        $('#editAdvanceModal').modal('hide');
+        setTimeout(() => {
+          location.reload(); 
+        }, 3000);
+    }
+      else showMessage("error", result.message);
+    })
+    .catch(err => console.error(err));
+  });
+
+  // فتح نافذة حذف
+  $('#datatable-buttons').on('click', '.delete-btn', function() {
+    const id = $(this).data('id');
+    $('#deletePatientId').val(id);
+    $('#confirmDeleteModal').modal('show');
+  });
+
+  // تأكيد الحذف
+  $('#confirmDeleteBtn').click(function() {
+    const id = $('#deletePatientId').val();
+    fetch(`/advances/delete/${id}`, { method: 'DELETE' })
+      .then(res => res.json())
+      .then(result => {
+        if(result.success) {
+        showMessage("success", result.message);
+        $('#confirmDeleteModal').modal('hide');
+        setTimeout(() => {
+          location.reload(); 
+        }, 3000);
+    }
+      else showMessage("error", result.message);
+    })
+    .catch(err => console.error(err));
+  });
+});
+</script>
+<script>
+    async function loadSpecialists() {
+  try {
+    const response = await fetch('/api/specialists');
+    const specialists = await response.json();
+
+    const select = document.querySelector('.speacial');
+
+    specialists.forEach(s => {
+      const option = document.createElement('option');
+      option.value = s.fullname;
+      option.textContent = s.fullname;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error loading specialists:', error);
+  }
+}
+
+loadSpecialists();
+  </script>
+  </body>
+</html>

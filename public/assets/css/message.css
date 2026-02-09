@@ -1,0 +1,44 @@
+.message {
+    position: relative;
+    padding: 15px 40px 15px 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .message.success {
+    background-color: #e6f9f3;
+    border: 1px solid #28a745;
+    color: #155724;
+  }
+
+  .message.error {
+    background-color: #fdecea;
+    border: 1px solid #dc3545;
+    color: #721c24;
+  }
+
+  .message.warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+  }
+
+  .message button {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* RTL */
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }

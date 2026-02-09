@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>اداره الجلسات</title>
+    
+<!-- Bootstrap Core -->
+<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- Progress Indicator -->
+<link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+
+<!-- Date and Time Pickers -->
+<link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<link href="../vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+
+<!-- DataTables -->
+<link href="../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+<link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+<link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+
+<!-- Input/UI Enhancements -->
+<link href="../vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+<link href="../vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+<link href="../vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+<link href="../vendors/cropper/dist/cropper.min.css" rel="stylesheet">
+<link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+<link href="../vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+<link href="../vendors/select2/dist/css/select2.min.css" rel="stylesheet">
+<link href="../vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+<link href="../vendors/starrr/dist/starrr.css" rel="stylesheet">
+    
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/message.css">
+  </head>
+  <style>
+     .service-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+            text-align: center;
+        }
+        
+        .service-info h5 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .service-info ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .service-info li {
+            padding: 5px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .service-info li:last-child {
+            border-bottom: none;
+        }
+    table[dir="rtl"] th, 
+    table[dir="rtl"] td {
+      text-align: right;
+    }
+    .edit-btn, .delete-btn {
+    padding: 6px 12px;
+    margin: 2px 4px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff;
+  }
+.btn-close {
+  position: absolute;
+  left: 20px;
+top: 20px;
+background-color: #a71d2a;
+border: none;
+color: black;
+border-radius: 5px;
+}
+  /* زر التعديل */
+  .edit-btn {
+    background-color: #007bff; /* أزرق */
+  }
+  .edit-btn:hover {
+    background-color: #0056b3;
+  }
+
+  /* زر الحذف */
+  .delete-btn {
+    background-color: #dc3545; /* أحمر */
+  }
+  .delete-btn:hover {
+    background-color: #a71d2a;
+  }
+    div.dataTables_wrapper {
+      direction: rtl;
+    }
+  </style>
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+                <a href="#" class="site_title"><img src="/assets/img/logos/center.png" alt="" width="50" height="50"> <span><img src="/assets/img/logos/samaA.png" alt="" width="160" height="70"></span></a>
+            </div>
+
+            <div class="clearfix"></div>
+            <br><br>
+            <%- include('../nav/navUser') %>
+        <!-- top navigation -->
+
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="">
+            <div class="page-title" dir="rtl">
+                <div class="title_right">
+                <h3 >اضافه جلسه</h3>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel" >
+                  <div class="x_title">
+                    <h2>ادخالات الجلسه</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                     
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                      <br />
+                      <form id="patientForm" class="form-horizontal form-label-left" dir="rtl">
+
+                        <div class="form-group">
+                          <div class="col-xs-12">
+                            <input type="text" name="fullname" required class="form-control" placeholder="اسم المريض">
+                          </div>
+                        </div>
+                      
+                        <div class="form-group" dir="rtl">
+                          <div class="col-xs-12">
+                            <div class="input-group date" id="myDatepicker">
+                              <input type="text" name="date" class="form-control" placeholder="اختر التاريخ" required />
+                              <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      
+                        <div class="form-group">
+                          <div class="col-xs-12">
+                            <select name="sessions" id="sessions" class="form-control" required>
+                              <option value="" disabled selected>اختر نوع الخدمة</option>
+                              <option value="جلسات علاج طبيعي (كبار)" data-price="3000">جلسات علاج طبيعي (كبار)</option>
+                              <option value="جلسات علاج طبيعي (أطفال)" data-price="1500">جلسات علاج طبيعي (أطفال)</option>
+                              <option value="استشارات تغذية" data-price="2000">استشارات تغذية</option>
+                              <option value="الحجامة بدون قلاصات" data-price="3000">الحجامة بدون قلاصات</option>
+                              <option value="الحجامة مع القلاصات" data-price="5000">الحجامة مع القلاصات</option>
+                              <option value="المساج الطبي الاسترخائي (جزئي)" data-price="5000">المساج الطبي الاسترخائي (جزئي)</option>
+                              <option value="المساج الطبي الاسترخائي (كلي)" data-price="10000">المساج الطبي الاسترخائي (كلي)</option>
+                              <option value="قلاصات الحجامة" data-price="2000">قلاصات الحجامة</option>
+                              <option value="اللاصقات" data-price="3000">اللاصقات</option>
+                              <option value="الصقات بالمتر (المتر الواحد)" data-price="600">الصقات بالمتر (المتر الواحد)</option>
+                              <option value="حزام الرقبة" data-price="2500">حزام الرقبة</option>
+                          </select>
+                          </div>
+                        </div>
+                  <div class="form-group">
+  <div class="col-xs-12">
+    <select name="speacial" id="speacial" class="form-control" required>
+      <option value="" disabled selected>اسم الاخصائي</option>
+    </select>
+  </div>
+</div>
+                      
+                        <div class="form-group">
+                          <div class="col-xs-12">
+                              <input id="price" name="price" class="form-control" required type="number" placeholder="السعر">
+                          </div>
+                      </div>
+                      
+                        <div class="form-group">
+                          <div class="col-xs-12">
+                            <textarea id="note" name="note" class="form-control" placeholder="ملاحظات"></textarea>
+                          </div>
+                        </div>
+                      
+                        <div class="form-group">
+                          <div class="col-xs-12 text-center">
+                            <button class="btn btn-warning" type="button">إلغاء</button>
+                            <button class="btn btn-secondary" type="reset">إعادة تعيين</button>
+                            <button type="submit" class="btn btn-success">حفظ</button>
+                          </div>
+                        </div>   
+                      </form>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            <div id="messageBox" class="message" style="display:none;">
+              <span id="messageText"></span>
+              <button id="closeBtn">&times;</button>
+            </div>
+            <div class="service-info">
+              <h5>قائمة الأسعار:</h5>
+              <ul>
+                  <li>معاينة علاج طبيعي: <span class="price-tag">1000 ريال</span></li>
+                  <li>جلسات علاج طبيعي (كبار): <span class="price-tag">3000 ريال</span></li>
+                  <li>جلسات علاج طبيعي (أطفال): <span class="price-tag">1500 ريال</span></li>
+                  <li>استشارات تغذية: <span class="price-tag">2000 ريال</span></li>
+                  <li>الحجامة بدون قلاصات: <span class="price-tag">3000 ريال</span></li>
+                  <li>الحجامة مع القلاصات: <span class="price-tag">5000 ريال</span></li>
+                  <li>المساج الطبي الاسترخائي (جزئي): <span class="price-tag">5000 ريال</span></li>
+                  <li>المساج الطبي الاسترخائي (كلي): <span class="price-tag">10000 ريال</span></li>
+                  <li>قلاصات الحجامة: <span class="price-tag">2000 ريال</span></li>
+                  <li>اللاصقات: <span class="price-tag">3000 ريال</span></li>
+                  <li>الصقات بالمتر (المتر الواحد): <span class="price-tag">600 ريال</span></li>
+                  <li>حزام الرقبة: <span class="price-tag">2500 ريال</span></li>
+              </ul>
+          </div>
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                  <div class="x_panel">
+                    <div class="x_title">
+                      <h2>متابعة حاله المريض</h2>
+                      <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                      </ul>
+                      <div class="clearfix"></div>
+                    </div>
+              
+                    <div class="x_content">
+                      <br />
+                      <form id="updateStatus"class="form-horizontal form-label-left input_mask">
+              
+                        <div class="form-group row">
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="patientSelect" name="sessions1" class="form-control" required>
+                              <option value="" disabled selected>اختر المريض</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="patientType" name="sessions2" class="form-control" required>
+                              <option value="" disabled selected>نوع الجلسة</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <select id="statusSelect" name="sessions1" class="form-control" required>
+                                <option value="" disabled selected>حاله المريض</option>
+                                <option value="complete">الحاله مكتمله</option>
+                                <option value="progress">قيد المتابعه</option>
+                                <option value="negative">حاله سلبيه</option>
+                              </select>
+                            </div>
+                          
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" id="statusInput" class="form-control" placeholder="الرجاء اختيار حالة لعرضها" disabled>
+                            </div>
+                          </div>
+                          
+                          
+                        <!-- أزرار -->
+                        <div class="form-group">
+                          <div class="col-xs-12 text-center">
+                              <button type="submit" class="btn btn-success">حفظ</button>
+                              <button class="btn btn-secondary" type="reset">إعادة تعيين</button>
+                              <button class="btn btn-warning" type="button">إلغاء</button>
+                          </div>
+                        </div>
+              
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           
+       
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>عرض الجلسات وتعديلها</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                          <i class="fa fa-wrench"></i>
+                        </a>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+              
+                    <!-- ✅ Add this wrapper -->
+                    <div class="table-responsive">
+                      <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" dir="rtl">
+                        <thead>
+                          <tr>
+                            <th>الاسم</th>
+                            <th>نوع المعاينة</th>
+                            <th>الطبيب المعالج</th>
+                            <th>حالة المريض</th>
+                            <th>التاريخ</th>
+                            <th>السعر</th>
+                            <th>ملاحظات</th>
+                            <th>إجراءات</th> <!-- هذا العمود لازم يكون موجود للرؤوس -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% session.forEach(s => { %>
+                            <tr>
+                              <td><%= s.fullname || 'غير محدد' %></td> 
+                              <td><%= s.session_type || 'غير محدد' %></td> 
+                              <td><%= s.speacial || 'غير محدد' %></td> 
+                              <td><%= s.status || 'غير محدد' %></td>
+                               <td><%= s.formattedDate || 'غير محدد' %></td> 
+                               <td><%= s.price || 'غير محدد' %></td>
+                              <td><%= s.notes %></td>
+                              <td>
+                                <button class="edit-btn" data-id="<%= s.id %>">تعديل</button>
+                                <button class="delete-btn" data-id="<%= s.id %>">حذف</button>
+                              </td>
+                            </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                    
+              
+                  </div>
+                </div>
+              </div>
+              <!-- Edit Session Modal -->
+<!-- Edit Session Modal -->
+<div class="modal fade" id="editSessionModal" tabindex="-1" aria-hidden="true" dir="rtl">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">تعديل بيانات الجلسة</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق">X</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="editSessionForm" class="form-horizontal form-label-left">
+          <input type="hidden" id="editSessionId">
+
+          <div class="form-group">
+            <input type="text" id="editName" name="fullname" required class="form-control" placeholder="اسم المريض">
+          </div>
+
+          <div class="form-group">
+            <input type="datetime-local" id="editDate" name="date" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+           <select name="sessions" id="editSessionType" class="form-control" required>
+              <option value="" disabled selected>اختر نوع الخدمة</option>
+              <option value="جلسات علاج طبيعي (كبار)" data-price="3000">جلسات علاج طبيعي (كبار)</option>
+              <option value="جلسات علاج طبيعي (أطفال)" data-price="1500">جلسات علاج طبيعي (أطفال)</option>
+              <option value="استشارات تغذية" data-price="2000">استشارات تغذية</option>
+              <option value="الحجامة بدون قلاصات" data-price="3000">الحجامة بدون قلاصات</option>
+              <option value="الحجامة مع القلاصات" data-price="5000">الحجامة مع القلاصات</option>
+              <option value="المساج الطبي الاسترخائي (جزئي)" data-price="5000">المساج الطبي الاسترخائي (جزئي)</option>
+              <option value="المساج الطبي الاسترخائي (كلي)" data-price="10000">المساج الطبي الاسترخائي (كلي)</option>
+              <option value="قلاصات الحجامة" data-price="2000">قلاصات الحجامة</option>
+              <option value="اللاصقات" data-price="3000">اللاصقات</option>
+              <option value="الصقات بالمتر (المتر الواحد)" data-price="600">الصقات بالمتر (المتر الواحد)</option>
+              <option value="حزام الرقبة" data-price="2500">حزام الرقبة</option>
+          </select>
+          </div>
+
+      
+
+<div class="form-group">
+  <select id="editTherapist" name="speacial" class="form-control speacial2" required>
+    <option value=" اسم الاخصائي" disabled selected>اسم الاخصائي</option>
+  </select>
+</div>
+          <div class="form-group">
+            <input id="editPrice" name="price" class="form-control" required type="number" placeholder="السعر">
+          </div>
+
+          <div class="form-group">
+            <textarea id="editNotes" name="note" class="form-control" placeholder="ملاحظات"></textarea>
+          </div>
+
+          <div class="form-group text-center">
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">إلغاء</button>
+            <button type="submit" class="btn btn-success">حفظ التغييرات</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">تأكيد الحذف</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>هل أنت متأكد أنك تريد حذف هذا المريض؟</p>
+        <input type="hidden" id="deletePatientId">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">إلغاء</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">تأكيد الحذف</button>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- footer content -->
+        <%- include('../footer/footer') %>
+    </div>
+</div>
+    <!-- jQuery -->
+    
+ <!-- Core Libraries -->
+ <script src="../vendors/jquery/dist/jquery.min.js"></script>
+ <!-- Bootstrap -->
+ <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+ <!-- FastClick -->
+ <script src="../vendors/fastclick/lib/fastclick.js"></script>
+ <!-- NProgress -->
+ <script src="../vendors/nprogress/nprogress.js"></script>
+ <!-- iCheck -->
+ <script src="../vendors/iCheck/icheck.min.js"></script>
+  <!-- Moment.js (needed for date/time plugins) -->
+  <script src="../vendors/moment/min/moment.min.js"></script>
+ 
+  <!-- Date/Time Pickers -->
+  <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+  <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+ <!-- DataTables JS -->
+ <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+ <!-- DataTables Buttons -->
+ <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap4.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+ <script src="../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+ <script src="../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+ <script src="../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+ <script src="../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+ <script src="../vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+ <script src="../vendors/jszip/dist/jszip.min.js"></script>
+ <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
+ <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
+
+ <!-- Custom Theme Scripts -->
+ <script src="../build/js/custom.min.js"></script>
+ 
+ <!-- Initialize datetimepicker -->
+ <script>
+  $('#myDatepicker').datetimepicker();
+
+  $('#myDatepicker2').datetimepicker({
+      format: 'DD.MM.YYYY'
+  });
+
+  $('#myDatepicker3').datetimepicker({
+      format: 'hh:mm A'
+  });
+
+  $('#myDatepicker4').datetimepicker({
+      ignoreReadonly: true,
+      allowInputToggle: true
+  });
+
+  $('#datetimepicker6').datetimepicker();
+
+  $('#datetimepicker7').datetimepicker({
+      useCurrent: false
+  });
+
+  $("#datetimepicker6").on("dp.change", function(e) {
+      $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+  });
+
+  $("#datetimepicker7").on("dp.change", function(e) {
+      $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+  });
+</script>
+
+ 
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+            const sessionsSelect = document.getElementById('sessions');
+            const priceInput = document.getElementById('price');
+            const priceValue = document.getElementById('priceValue');
+            const form = document.getElementById('serviceForm');
+
+            // Event listener for service selection change
+            sessionsSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                
+                if (price) {
+                    // Update price input
+                    priceInput.value = price;
+                    
+                    // Update price display
+                    priceValue.textContent = parseInt(price).toLocaleString();
+                    setTimeout(() => {
+                        priceDisplay.classList.remove('updated');
+                    }, 300);
+                } else {
+                    // Clear price if no service selected
+                    priceInput.value = '';
+                    priceDisplay.style.display = 'none';
+                }
+            });
+          })
+    document.getElementById('statusSelect').addEventListener('change', function () {
+      const input = document.getElementById('statusInput');
+      const selected = this.value;
+  
+      // إعادة ضبط الألوان أولاً
+      input.style.backgroundColor = '';
+      input.style.borderColor = '';
+  
+      // تغيّر اللون بناءً على القيمة
+      if (selected === 'complete') {
+        input.style.backgroundColor = '#d4edda'; // أخضر فاتح
+        input.style.borderColor = '#28a745';     // أخضر
+      } else if (selected === 'progress') {
+        input.style.backgroundColor = '#fff3cd'; // برتقالي فاتح
+        input.style.borderColor = '#fd7e14';     // برتقالي
+      } else if (selected === 'negative') {
+        input.style.backgroundColor = '#f8d7da'; // أحمر فاتح
+        input.style.borderColor = '#dc3545';     // أحمر
+      }
+    });
+    const msgBox = document.getElementById("messageBox");
+  const msgText = document.getElementById("messageText");
+  const closeBtn = document.getElementById("closeBtn");
+
+    function showMessage(type, text) {
+    msgBox.className = "message " + type; // success | error | warning
+    msgText.textContent = text;
+    msgBox.style.display = "block";
+  
+    // إخفاء بعد 4 ثواني
+    setTimeout(() => {
+      msgBox.style.display = "none";
+    }, 4000);
+  }
+  
+  closeBtn.addEventListener("click", () => {
+    msgBox.style.display = "none";
+  });
+
+
+  document.getElementById("patientForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
+
+      try {
+        const res = await fetch("/addsession", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        if (res.ok) {
+          showMessage("success", result.message);
+          form.reset();
+        } else {
+          showMessage("error", result.message);
+        }
+      } catch (err) {
+        console.error(err);
+        showMessage("error", "⚠️ لا يمكن الاتصال بالسيرفر!");
+      }
+    });
+  let patientsData = [];
+
+  async function loadPatients() {
+  try {
+    const res = await fetch("/api/showPatientsNames");
+    patientsData = await res.json();
+
+    const select = document.getElementById("patientSelect");
+    select.innerHTML = '<option value="" disabled selected>اختر المريض</option>';
+
+    patientsData.forEach(p => {
+      if (p.status !== "complete") { // فقط المرضى غير المكتملة
+        const option = document.createElement("option");
+        option.value = p.id;
+        option.textContent = p.fullname;
+        select.appendChild(option);
+      }
+    });
+  } catch (err) {
+    console.error("⚠️ خطأ في تحميل المرضى:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadPatients();
+
+  document.getElementById("patientSelect").addEventListener("change", function () {
+  const patientId = this.value;
+  const patient = patientsData.find(p => p.id == patientId);
+
+  const typeSelect = document.getElementById("patientType");
+  typeSelect.innerHTML = '<option value="" disabled selected>نوع الجلسة</option>';
+
+  if (patient && patient.session_type) {
+    const option = document.createElement("option");
+    option.value = patient.session_type;
+    option.textContent = patient.session_type;
+    option.selected = true;
+    typeSelect.appendChild(option);
+  }
+});
+});
+let selectedPatientId = null; 
+
+
+document.getElementById("patientSelect")?.addEventListener("change", function() {
+  selectedPatientId = this.value; // نخزن الـ id عشان نستخدمه للتحديث
+});
+
+// عند تغيير الحالة
+document.getElementById("statusSelect").addEventListener("change", async function() {
+  if (!selectedPatientId) {
+    alert("⚠️ الرجاء اختيار مريض أولاً");
+    this.value = ""; // يرجع القائمة فاضية
+    return;
+  }
+
+  const newStatus = this.value;
+  console.log("تحديث حالة المريض ID:", selectedPatientId, "إلى الحالة:", newStatus);  
+  try {
+    const res = await fetch(`/api/updateStatus/${selectedPatientId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      showMessage("success", data.message);
+    } else {
+      showMessage("error", data.message);
+    }
+  } catch (err) {
+    console.error("❌ خطأ أثناء تحديث الحالة:", err);
+    alert("⚠️ لم يتم التحديث، تحقق من السيرفر");
+  }
+});
+const patientSelect = document.getElementById("patientSelect");
+const statusSelect = document.getElementById("statusSelect");
+statusSelect.addEventListener("change", () => {
+  const selectedStatus = statusSelect.value;
+
+  if (selectedStatus === "complete") {
+    // إزالة المريض المختار من القائمة
+    const selectedPatient = patientSelect.value;
+    if (selectedPatient) {
+      const optionToRemove = patientSelect.querySelector(`option[value="${selectedPatient}"]`);
+      if (optionToRemove) optionToRemove.remove();
+      patientSelect.value = ""; // إعادة تعيين الاختيار
+    }
+  }
+});
+// عندما يضغط المستخدم على زر الإلغاء داخل أي مودال
+$(document).on('click', '[data-bs-dismiss="modal"]', function () {
+    $(this).closest('.modal').modal('hide');
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  // ✅ تفعيل DataTables
+  $('#datatable-buttons').DataTable();
+
+  // ✅ عند الضغط على زر تعديل
+  $(document).on("click", ".edit-btn", async function () {
+    const id = $(this).data("id");
+
+    try {
+      // جلب بيانات الجلسة من قاعدة البيانات
+      const res = await fetch(`/api/sessions/${id}`);
+      const session = await res.json();
+console.log(session);
+      if (!res.ok) {
+        alert(session.message || "فشل في جلب بيانات الجلسة");
+        return;
+      }
+
+      // ✅ تعبئة الحقول داخل المودال
+    $("#editSessionId").val(session.id);
+$("#editName").val(session.fullname || "");
+$("#editDate").val(session.dates ? session.dates.substring(0,16) : ""); // YYYY-MM-DDTHH:MM
+$("#editSessionType").val(session.session_type || "");
+let therapistSelect = $("#editTherapist");
+if (therapistSelect.find(`option[value='${session.speacial}']`).length === 0) {
+  therapistSelect.append(`<option value="${session.speacial}">${session.speacial}</option>`);
+}
+
+// ثم تعيين القيمة
+therapistSelect.val(session.speacial);
+$("#editPrice").val(session.price || "");
+$("#editNotes").val(session.note || "");
+
+      // ✅ فتح المودال
+      $("#editSessionModal").modal("show");
+    } catch (err) {
+      console.error("❌ خطأ في جلب بيانات الجلسة:", err);
+      alert("حدث خطأ في الاتصال بالسيرفر");
+    }
+  });
+
+  // ✅ عند حفظ التغييرات
+  document.getElementById("editSessionForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const id = document.getElementById("editSessionId").value;
+    const updatedData = {
+      fullname: document.getElementById("editName").value,
+      session_type: document.getElementById("editSessionType").value,
+      speacial: document.getElementById("editTherapist").value,
+      session_date: document.getElementById("editDate").value,
+      price: document.getElementById("editPrice").value,
+      notes: document.getElementById("editNotes").value
+    };
+
+    try {
+      const res = await fetch(`/api/updateSession/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        showMessage("success", data.message);
+
+        // ✅ تحديث الصف مباشرة دون إعادة تحميل الصفحة
+        const row = document.querySelector(`.edit-btn[data-id='${id}']`).closest("tr");
+        if (row) {
+          row.children[0].textContent = updatedData.fullname;
+          row.children[1].textContent = updatedData.session_type;
+          row.children[2].textContent = updatedData.speacial;
+          row.children[4].textContent = updatedData.session_date;
+          row.children[5].textContent = updatedData.price;
+          row.children[6].textContent = updatedData.notes;
+        }
+
+        // ✅ إغلاق المودال
+        $("#editSessionModal").modal("hide");
+      } else {
+        showMessage("error", data.message);
+      }
+
+    } catch (err) {
+      console.error("❌ خطأ أثناء التحديث:", err);
+      showMessage("error", "تعذر الاتصال بالسيرفر");
+    }
+  });
+});
+
+
+
+
+
+$(document).on("click", ".delete-btn", function(e) {
+  e.preventDefault();
+  const deleteId = $(this).data("id");
+  $("#deletePatientId").val(deleteId); // نخزن الـ id في input hidden
+  $("#confirmDeleteModal").modal("show"); // فتح المودال باستخدام jQuery
+});
+
+// عند تأكيد الحذف
+$("#confirmDeleteBtn").on("click", async function() {
+  const id = $("#deletePatientId").val();
+
+  try {
+    const res = await fetch(`/api/deleteSession/${id}`, { method: "DELETE" });
+    const data = await res.json();
+
+    if (res.ok) {
+      showMessage("success", data.message || "تم حذف الجلسة بنجاح!");
+      $("#confirmDeleteModal").modal("hide"); // إخفاء المودال
+      // إزالة الصف مباشرة
+      $(`button.delete-btn[data-id='${id}']`).closest("tr").remove();
+    } else {
+      showMessage("error", data.message || "فشل الحذف!");
+    }
+  } catch (err) {
+    console.error(err);
+    showMessage("error", "⚠️ خطأ أثناء الحذف!");
+  }
+});
+  </script>
+  <script>
+async function loadSpecialists() {
+  try {
+    const response = await fetch('/api/specialists'); // backend route
+    const specialists = await response.json();
+
+    const select1 = document.getElementById('speacial');
+    const select2 = document.querySelector('.speacial2');
+
+    specialists.forEach(s => {
+      const option1 = document.createElement('option');
+      option1.value = s.fullname;
+      option1.textContent = s.fullname;
+      select1.appendChild(option1);
+
+      const option2 = option1.cloneNode(true);
+      select2.appendChild(option2);
+    });
+  } catch (error) {
+    console.error('Error loading specialists:', error);
+  }
+}
+
+loadSpecialists();
+  </script>
+</body>
+</html>
